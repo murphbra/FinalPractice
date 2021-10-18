@@ -66,8 +66,24 @@ function get_lodgings() {
  *      If no lodging with the provided id exists, then the value of the 
  *          element is undefined
  */
+/*
 function get_lodging(id) {
     const key = datastore.key([LODGING, parseInt(id, 10)]);
+    return datastore.get(key).then((entity) => {
+        if (entity[0] === undefined || entity[0] === null) {
+            // No entity found. Don't try to add the id attribute
+            return entity;
+        } else {
+            // Use Array.map to call the function fromDatastore. This function
+            // adds id attribute to every element in the array entity
+            return entity.map(fromDatastore);
+        }
+    });
+}
+*/
+
+function get_boat(id) {
+    const key = datastore.key([BOAT, parseInt(id, 10)]);
     return datastore.get(key).then((entity) => {
         if (entity[0] === undefined || entity[0] === null) {
             // No entity found. Don't try to add the id attribute
@@ -145,13 +161,13 @@ router.delete('/lodgings/:id', function (req, res) {
  * determine when no lodging exists with that ID.
  */
 router.get('/:id', function (req, res) {
-    get_lodging(req.params.id)
-        .then(lodging => {
-            if (lodging[0] === undefined || lodging[0] === null) {
+    get_boat(req.params.id)
+        .then(boat => {
+            if (boat[0] === undefined || boat[0] === null) {
                 // The 0th element is undefined. This means there is no lodging with this id
-                res.status(404).json({ 'Error': 'No lodding exists with this id' });
+                res.status(404).json({ 'Error': 'No boat exists with this boat_id exists' });
             } else {
-                // Return the 0th element which is the lodging with this id
+                // Return the 0th element which is the boat with this id
                 res.status(200).json(lodging[0]);
             }
         });
