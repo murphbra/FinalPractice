@@ -83,24 +83,24 @@ function delete_lodging(id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/', function (req, res) {
+router.get('/lodgings', function (req, res) {
     const lodgings = get_lodgings()
         .then((lodgings) => {
             res.status(200).json(lodgings);
         });
 });
 
-router.post('/', function (req, res) {
+router.post('/lodgings', function (req, res) {
     post_lodging(req.body.name, req.body.description, req.body.price)
         .then(key => { res.status(200).send('{ "id": ' + key.id + ' }') });
 });
 
-router.put('/:id', function (req, res) {
+router.put('/lodgings/:id', function (req, res) {
     put_lodging(req.params.id, req.body.name, req.body.description, req.body.price)
         .then(res.status(200).end());
 });
 
-router.delete('/:id', function (req, res) {
+router.delete('/lodgings/:id', function (req, res) {
     delete_lodging(req.params.id).then(res.status(200).end())
 });
 
@@ -124,7 +124,7 @@ router.get('/:id', function (req, res) {
 
 /* ------------- End Controller Functions ------------- */
 
-app.use('/lodgings', router);
+app.use('/', router);
 
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
