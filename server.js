@@ -70,6 +70,16 @@ function get_boats() {
         return entities[0].map(fromDatastore);
     });
 }
+
+function get_slips() {
+    const q = datastore.createQuery(SLIP);
+    return datastore.runQuery(q).then((entities) => {
+        // Use Array.map to call the function fromDatastore. This function
+        // adds id attribute to every element in the array at element 0 of
+        // the variable entities
+        return entities[0].map(fromDatastore);
+    });
+}
 /**
  * This function is not in the code discussed in the video. It demonstrates how
  * to get a single entity from Datastore using an id.
@@ -113,6 +123,20 @@ function get_boat(id) {
     });
 }
 
+function get_slip(id) {
+    const key = datastore.key([SLIP, parseInt(id, 10)]);
+    return datastore.get(key).then((entity) => {
+        if (entity[0] === undefined || entity[0] === null) {
+            // No entity found. Don't try to add the id attribute
+            return entity;
+        } else {
+            // Use Array.map to call the function fromDatastore. This function
+            // adds id attribute to every element in the array entity
+            return entity.map(fromDatastore);
+        }
+    });
+}
+
 function put_lodging(id, name, description, price) {
     const key = datastore.key([LODGING, parseInt(id, 10)]);
     const lodging = { "name": name, "description": description, "price": price };
@@ -139,6 +163,16 @@ router.get('/boats', function (req, res) {
         });
 });
 
+router.get('/slips', function (req, res) {
+    const slips = get_slips().then((slips) => {
+
+            for(var i = 0; i< slips.length ; i++)
+            {
+                slips[i].self = "https://cs493a3.wm.r.appspot.com/slips/" + slips[i].id; 
+            }
+            res.status(200).json(slips);
+        });
+});
 /*
 router.post('/lodgings', function (req, res) {
     post_lodging(req.body.name, req.body.description, req.body.price)
@@ -205,6 +239,20 @@ router.get('/boats/:id', function (req, res) {
                 // Return the 0th element which is the boat with this id
                 boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
                 res.status(200).json(boat[0]);
+            }
+        });
+});
+
+router.get('/slips/:id', function (req, res) {
+    get_slip(req.params.id)
+        .then(slip => {
+            if (slip[0] === undefined || slip[0] === null) {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'No slip with this slip_id exists' });
+            } else {
+                // Return the 0th element which is the boat with this id
+                slip[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + slip[0].id; 
+                res.status(200).json(slip[0]);
             }
         });
 });
