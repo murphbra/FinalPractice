@@ -8,7 +8,8 @@ const bodyParser = require('body-parser');
 
 const datastore = new Datastore();
 
-const LODGING = "Lodging";
+//const LODGING = "Lodging";
+const BOAT = "Boat"; 
 
 const router = express.Router();
 
@@ -21,11 +22,19 @@ function fromDatastore(item) {
 
 app.set('trust proxy', true); 
 /* ------------- Begin Lodging Model Functions ------------- */
+/*
 function post_lodging(name, description, price) {
     var key = datastore.key(LODGING);
     const new_lodging = { "name": name, "description": description, "price": price };
     return datastore.save({ "key": key, "data": new_lodging }).then(() => { return key });
 }
+*/
+function post_boat(name, type, length) {
+    var key = datastore.key(BOAT);
+    const new_boat = { "name": name, "type": type, "length": length };
+    return datastore.save({ "key": key, "data": new_boat }).then(() => { return key });
+}
+
 
 /**
  * The function datastore.query returns an array, where the element at index 0
@@ -91,9 +100,19 @@ router.get('/lodgings', function (req, res) {
         });
 });
 
+/*
 router.post('/lodgings', function (req, res) {
     post_lodging(req.body.name, req.body.description, req.body.price)
         .then(key => { res.status(200).send('{ "id": ' + key.id + ' }') });
+});
+*/
+router.post('/boats', function (req, res) {
+    if(req.body.name == undefined || req.body.type == undefined || req.body.length == undefined){
+        res.status(400)
+    } else {
+        post_boat(req.body.name, req.body.type, req.body.length)
+        .then(key => { res.status(201).send('{ "id": ' + key.id + ',' + '"name":'+ key.name+ ' }') });
+    }
 });
 
 router.put('/lodgings/:id', function (req, res) {
