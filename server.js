@@ -53,6 +53,15 @@ function get_lodgings() {
     });
 }
 
+function get_boats() {
+    const q = datastore.createQuery(BOAT);
+    return datastore.runQuery(q).then((entities) => {
+        // Use Array.map to call the function fromDatastore. This function
+        // adds id attribute to every element in the array at element 0 of
+        // the variable entities
+        return entities[0].map(fromDatastore);
+    });
+}
 /**
  * This function is not in the code discussed in the video. It demonstrates how
  * to get a single entity from Datastore using an id.
@@ -111,10 +120,10 @@ function delete_lodging(id) {
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/lodgings', function (req, res) {
-    const lodgings = get_lodgings()
-        .then((lodgings) => {
-            res.status(200).json(lodgings);
+router.get('/boats', function (req, res) {
+    const boats = get_boats()
+        .then((boats) => {
+            res.status(200).json(boats);
         });
 });
 
