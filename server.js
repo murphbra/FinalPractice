@@ -134,18 +134,14 @@ function put_lodging(id, name, description, price) {
     return datastore.save({ "key": key, "data": lodging });
 }
 
+/*
 function put_boat_in_slip(slip_id, boat_id) {
     const slip_key = datastore.key([SLIP, parseInt(slip_id, 10)]);
     return datastore.get(slip_key).then((entity) => {
             entity[0].current_boat = boat_id; 
         }); 
     }
-
-
-function delete_lodging(id) {
-    const key = datastore.key([LODGING, parseInt(id, 10)]);
-    return datastore.delete(key);
-}
+*/ 
 
 /* ------------- End Model Functions ------------- */
 
@@ -172,12 +168,7 @@ router.get('/slips', function (req, res) {
             res.status(200).json(slips);
         });
 });
-/*
-router.post('/lodgings', function (req, res) {
-    post_lodging(req.body.name, req.body.description, req.body.price)
-        .then(key => { res.status(200).send('{ "id": ' + key.id + ' }') });
-});
-*/
+
 router.post('/boats', function (req, res) {
     if(req.body.length === undefined)
     {
@@ -219,6 +210,7 @@ router.put('/lodgings/:id', function (req, res) {
         .then(res.status(200).end());
 });
 
+/*
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
 
     get_slip(req.params.slip_id).then (slip => {
@@ -245,6 +237,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 
     put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end()) 
 }); 
+*/ 
 
 /**
  * This route is not in the file discussed in the video. It demonstrates how to
