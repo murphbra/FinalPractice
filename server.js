@@ -108,15 +108,16 @@ router.post('/lodgings', function (req, res) {
 });
 */
 router.post('/boats', function (req, res) {
-    if(req.body.name == undefined || req.body.type == undefined || req.body.length == undefined){
-        res.status(400)
-    } else {
-        post_boat(req.body.name, req.body.type, req.body.length)
-        .then(new_boat => { 
+    if(req.body.name == undefined || req.body.type == undefined || req.body.length == undefined)
+    {
+        res.status(400); 
+    } 
+    else 
+    {
+        post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
             new_boat[self] = "https://cs493a3.wm.r.appspot.com/boats/" + string(new_boat.id); 
             res.status(201).send(new_boat); 
         }); 
-            //res.status(201).send('{ "name": '+ '"' + new_boat.name + '"' + ',' + '\n' + '"type": ' + '"' + new_boat.type +'"' + ',' + '\n' + '"length": ' + new_boat.length  + ' }') });
     }
 });
 
