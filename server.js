@@ -112,7 +112,7 @@ router.post('/boats', function (req, res) {
     } else {
         post_boat(req.body.name, req.body.type, req.body.length)
         .then(new_boat => { 
-            res.status(201).send('{ "name":'+ new_boat.name + ',' + '\n' + '"type:"' + new_boat.type + ',' + '\n' + '"length:"' + new_boat.length ' }') });
+            res.status(201).send('{ "name":'+ new_boat.name + ',' + '"type:"' + new_boat.type + ',' + '"length:"' + new_boat.length + ' }') });
     }
 });
 
