@@ -212,6 +212,7 @@ router.put('/lodgings/:id', function (req, res) {
 
 
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
+    
     get_slip(req.params.slip_id).then ((slip) => 
         {
             if (slip[0] === undefined || slip[0] === null) 
@@ -220,12 +221,13 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
             }
 
-            else if(slip[0].current_boat !=== null)
+            else if (slip[0].current_boat !== null)
             {
                 res.status(403).json({ 'Error': 'There is already a boat at this slip'}).end(); 
             }
 
         }); 
+    
     get_boat(req.params.boat_id).then((boat) => 
         {
             if (boat[0] === undefined || boat[0] === null) 
@@ -235,6 +237,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
             }
         }); 
     put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end()); 
+    
 }); 
 
 
