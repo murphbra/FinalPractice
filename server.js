@@ -242,14 +242,9 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }); 
             }
         }); 
-        
-    put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end() ); 
+
+    put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end()) 
 }); 
-
-
-router.delete('/lodgings/:id', function (req, res) {
-    delete_lodging(req.params.id).then(res.status(200).end())
-});
 
 /**
  * This route is not in the file discussed in the video. It demonstrates how to
