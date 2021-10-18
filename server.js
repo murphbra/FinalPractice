@@ -111,7 +111,7 @@ router.post('/boats', function (req, res) {
         res.status(400)
     } else {
         post_boat(req.body.name, req.body.type, req.body.length)
-        .then(key => { res.status(201).send('{ "id": ' + key.id + ',' + '"name":'+ key.name+ ' }') });
+        .then(key => { res.status(201).send('{ "id": ' + key.id + ',' + '"name":'+ key.data + ' }') });
     }
 });
 
