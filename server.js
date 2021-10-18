@@ -111,15 +111,15 @@ router.post('/lodgings', function (req, res) {
 router.post('/boats', function (req, res) {
     if(req.body.length === undefined)
     {
-        res.status(400); 
+        res.status(400).end(); 
     } 
     if(req.body.name === undefined)
     {
-        res.status(400); 
+        res.status(400).end(); 
     }
     if(req.body.type === undefined)
     {
-        res.status(400); 
+        res.status(400).end(); 
     }
     else 
     {
