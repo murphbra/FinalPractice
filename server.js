@@ -165,7 +165,7 @@ router.get('/boats/:id', function (req, res) {
         .then(boat => {
             if (boat[0] === undefined || boat[0] === null) {
                 // The 0th element is undefined. This means there is no lodging with this id
-                res.status(404).json({ 'Error': 'No boat exists with this boat_id exists' });
+                res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
             } else {
                 // Return the 0th element which is the boat with this id
                 boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
