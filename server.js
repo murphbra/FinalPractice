@@ -32,8 +32,9 @@ function post_lodging(name, description, price) {
 function post_boat(name, type, length) {
     var key = datastore.key(BOAT);
     const new_boat = { "name": name, "type": type, "length": length };
-    new_boat.id = key.id; 
-    return datastore.save({ "key": key, "data": new_boat }).then(() => { return new_boat });
+    return datastore.save({ "key": key, "data": new_boat }).then(() => { 
+        new_boat.id = key.id; 
+        return new_boat });
 }
 
 
@@ -115,8 +116,7 @@ router.post('/boats', function (req, res) {
     else 
     {
         post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
-            //var idString = string(new_boat.id); 
-            //new_boat[self] = "https://cs493a3.wm.r.appspot.com/boats/" + idString; 
+            new_boat.self = "https://cs493a3.wm.r.appspot.com/boats/" + new_boat.id; 
             res.status(201).send(new_boat); 
         }); 
     }
