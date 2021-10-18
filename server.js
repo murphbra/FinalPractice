@@ -109,10 +109,18 @@ router.post('/lodgings', function (req, res) {
 });
 */
 router.post('/boats', function (req, res) {
-    if(req.body.length === undefined || req.body.name === undefined || req.body.type === undefined)
+    if(req.body.length === undefined)
     {
         res.status(400); 
     } 
+    if(req.body.name === undefined)
+    {
+        res.status(400); 
+    }
+    if(req.body.type === undefined)
+    {
+        res.status(400); 
+    }
     else 
     {
         post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
