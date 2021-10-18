@@ -187,6 +187,37 @@ router.get('/boats/:id', function (req, res) {
         });
 });
 
+router.patch('/boats/:id', function (req, res) {
+    if(req.body.length === undefined)
+    {
+        res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+    } 
+    if(req.body.name === undefined)
+    {
+        res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+    }
+    if(req.body.type === undefined)
+    {
+        res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+    }
+    else{
+        get_boat(req.params.id)
+        .then(boat => {
+            if (boat[0] === undefined || boat[0] === null) {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
+            } else {
+                // Return the 0th element which is the boat with this id
+                boat[0].name = req.body.name;
+                boat[0].type = req.body.type;
+                boat[0].length = req.body.length;
+                boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
+                res.status(200).json(boat[0]);
+            }
+        });
+
+    }
+});
 /* ------------- End Controller Functions ------------- */
 
 app.use('/', router);
