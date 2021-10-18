@@ -122,10 +122,10 @@ function delete_lodging(id) {
 
 router.get('/boats', function (req, res) {
     get_boats().then((boats) => {
-        
-            for(boat in boats)
+
+            for(var i = 0; i< boats.length ; i++)
             {
-                boat.self = "https://cs493a3.wm.r.appspot.com/boats/" + boat.id; 
+                boats[i].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[i].id; 
             }
             res.status(200).json(boats);
         });
