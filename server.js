@@ -51,15 +51,6 @@ function post_slip(number) {
  * is itself an array. Each element in the array at element 0 is a JSON object
  * with an entity fromt the type "Lodging".
  */
-function get_lodgings() {
-    const q = datastore.createQuery(LODGING);
-    return datastore.runQuery(q).then((entities) => {
-        // Use Array.map to call the function fromDatastore. This function
-        // adds id attribute to every element in the array at element 0 of
-        // the variable entities
-        return entities[0].map(fromDatastore);
-    });
-}
 
 function get_boats() {
     const q = datastore.createQuery(BOAT);
@@ -143,6 +134,14 @@ function put_lodging(id, name, description, price) {
     return datastore.save({ "key": key, "data": lodging });
 }
 
+function put_boat_in_slip(slip_id, boat_id) {
+    const slip_key = datastore.key([SLIP, parseInt(slip_id, 10)]);
+    return datastore.get(slip_key).then((entity) => {
+            entity[0].current_boat = boat_id; 
+        }); 
+    }
+
+
 function delete_lodging(id) {
     const key = datastore.key([LODGING, parseInt(id, 10)]);
     return datastore.delete(key);
@@ -219,6 +218,33 @@ router.put('/lodgings/:id', function (req, res) {
     put_lodging(req.params.id, req.body.name, req.body.description, req.body.price)
         .then(res.status(200).end());
 });
+
+router.put('/slips/:slip_id/:boat_id', function (req, res) 
+{
+    get_slip(req.params.slip_id).then(slip => 
+        {
+            if (slip[0] === undefined || slip[0] === null) 
+            {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' })
+            };
+            else if(slip[0].current_boat !=== null)
+            {
+                res.status(403).json({ 'Error': 'There is already a boat at this slip'})
+            };
+        }
+    get_boat(req.params.boat_id).then(boat => 
+        {
+            if (boat[0] === undefined || boat[0] === null) 
+            {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' })
+            };
+        }
+    put_boat_in_slip(req.params.slip_id, req.params.boat_id)
+        .then(res.status(204).end());
+});
+
 
 router.delete('/lodgings/:id', function (req, res) {
     delete_lodging(req.params.id).then(res.status(200).end())
