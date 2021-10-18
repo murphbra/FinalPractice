@@ -134,14 +134,14 @@ function put_lodging(id, name, description, price) {
     return datastore.save({ "key": key, "data": lodging });
 }
 
-/*
+
 function put_boat_in_slip(slip_id, boat_id) {
     const slip_key = datastore.key([SLIP, parseInt(slip_id, 10)]);
     return datastore.get(slip_key).then((entity) => {
             entity[0].current_boat = boat_id; 
         }); 
     }
-*/ 
+
 
 /* ------------- End Model Functions ------------- */
 
