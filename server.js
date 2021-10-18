@@ -32,7 +32,7 @@ function post_lodging(name, description, price) {
 function post_boat(name, type, length) {
     var key = datastore.key(BOAT);
     const new_boat = { "name": name, "type": type, "length": length };
-    new_boat[id] = key[id]; 
+    //ew_boat[id] = key[id]; 
     return datastore.save({ "key": key, "data": new_boat }).then(() => { return new_boat });
 }
 
