@@ -115,8 +115,8 @@ router.post('/boats', function (req, res) {
     else 
     {
         post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
-            var idString = string(new_boat.id); 
-            new_boat[self] = "https://cs493a3.wm.r.appspot.com/boats/" + idString; 
+            //var idString = string(new_boat.id); 
+            //new_boat[self] = "https://cs493a3.wm.r.appspot.com/boats/" + idString; 
             res.status(201).send(new_boat); 
         }); 
     }
