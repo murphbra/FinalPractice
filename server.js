@@ -121,8 +121,8 @@ function delete_lodging(id) {
 /* ------------- Begin Controller Functions ------------- */
 
 router.get('/boats', function (req, res) {
-    const boats = get_boats()
-        .then((boats) => {
+    get_boats().then((boats) => {
+        
             for(boat in boats)
             {
                 boat.self = "https://cs493a3.wm.r.appspot.com/boats/" + boat.id; 
