@@ -109,7 +109,7 @@ router.post('/lodgings', function (req, res) {
 });
 */
 router.post('/boats', function (req, res) {
-    if(req.body.name === undefined || req.body.type === undefined || req.body.length === undefined)
+    if(req.body.length === undefined || req.body.name === undefined || req.body.type === undefined)
     {
         res.status(400); 
     } 
