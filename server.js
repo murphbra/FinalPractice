@@ -32,7 +32,8 @@ function post_lodging(name, description, price) {
 function post_boat(name, type, length) {
     var key = datastore.key(BOAT);
     const new_boat = { "name": name, "type": type, "length": length };
-    return datastore.save({ "key": key, "data": new_boat }).then(() => { return key });
+    fromDatastore(new_boat);
+    return datastore.save({ "key": key, "data": new_boat }).then(() => { return new_boat });
 }
 
 
@@ -111,7 +112,8 @@ router.post('/boats', function (req, res) {
         res.status(400)
     } else {
         post_boat(req.body.name, req.body.type, req.body.length)
-        .then(key => { res.status(201).send('{ "id": ' + key.id + ',' + '"name":'+ key.data + ' }') });
+        .then(new_boat => { 
+            res.status(201).send('{ "name":'+ new_boat.name + ',' + '\n' + '"type:"' + new_boat.type + ',' + '\n' + '"length:"' + new_boat.length ' }') });
     }
 });
 
