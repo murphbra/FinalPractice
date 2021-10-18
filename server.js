@@ -19,6 +19,7 @@ function fromDatastore(item) {
     return item;
 }
 
+app.set('trust proxy', true); 
 /* ------------- Begin Lodging Model Functions ------------- */
 function post_lodging(name, description, price) {
     var key = datastore.key(LODGING);
