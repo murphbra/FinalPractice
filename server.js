@@ -170,7 +170,7 @@ router.post('/boats', function (req, res) {
 router.post('/slips', function (req, res) {
     if(req.body.number === undefined)
     {
-        res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+        res.status(400).json({ 'Error': 'The request object is missing the required number' }).end(); 
     } 
     else 
     {
