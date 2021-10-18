@@ -11,6 +11,8 @@ const datastore = new Datastore();
 //const LODGING = "Lodging";
 const BOAT = "Boat"; 
 
+const SLIP = "Slip"; 
+
 const router = express.Router();
 
 app.use(bodyParser.json());
@@ -37,7 +39,13 @@ function post_boat(name, type, length) {
         return new_boat });
 }
 
-
+function post_slip(number) {
+    var key = datastore.key(SLIP);
+    const new_slip = { "number": number, "current_boat": null };
+    return datastore.save({ "key": key, "data": new_slip }).then(() => { 
+        new_slip.id = key.id; 
+        return new_slip });
+}
 /**
  * The function datastore.query returns an array, where the element at index 0
  * is itself an array. Each element in the array at element 0 is a JSON object
@@ -155,6 +163,20 @@ router.post('/boats', function (req, res) {
         post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
             new_boat.self = "https://cs493a3.wm.r.appspot.com/boats/" + new_boat.id; 
             res.status(201).send(new_boat); 
+        }); 
+    }
+});
+
+router.post('/slips', function (req, res) {
+    if(req.body.number === undefined)
+    {
+        res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+    } 
+    else 
+    {
+        post_slip(req.body.number).then(new_slip => { 
+            new_slip.self = "https://cs493a3.wm.r.appspot.com/slips/" + new_slip.id; 
+            res.status(201).send(new_slip); 
         }); 
     }
 });
