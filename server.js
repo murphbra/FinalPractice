@@ -251,7 +251,7 @@ router.get('/slips/:id', function (req, res) {
                 res.status(404).json({ 'Error': 'No slip with this slip_id exists' });
             } else {
                 // Return the 0th element which is the boat with this id
-                slip[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + slip[0].id; 
+                slip[0].self = "https://cs493a3.wm.r.appspot.com/slips/" + slip[0].id; 
                 res.status(200).json(slip[0]);
             }
         });
