@@ -242,7 +242,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res)
             }
         }); 
     put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end() ); 
-}
+}); 
 
 
 router.delete('/lodgings/:id', function (req, res) {
