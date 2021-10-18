@@ -160,7 +160,7 @@ router.delete('/lodgings/:id', function (req, res) {
  * get a single lodging from Datastore using the provided id and also how to 
  * determine when no lodging exists with that ID.
  */
-router.get('/:id', function (req, res) {
+router.get('/boats/:id', function (req, res) {
     get_boat(req.params.id)
         .then(boat => {
             if (boat[0] === undefined || boat[0] === null) {
