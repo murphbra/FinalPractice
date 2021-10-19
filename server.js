@@ -281,7 +281,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 
                         else
                         {
-                            slip.current_boat = req.params.boat_id; 
+                            slip[0].current_boat = req.params.boat_id; 
                             res.status(204).end(); 
                         }
                     })
