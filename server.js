@@ -105,7 +105,7 @@ function put_boat_in_slip(slip_id, boat_id, number) {
     return datastore.save({ "key": key, "data": slip });
     }
 
-function boat_departs_slip(slip_id, boat_id, number) {
+function boat_departs_slip(slip_id, number) {
     const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
     const slip = { "number": number, "current_boat": null}; 
     return datastore.save({ "key": key, "data": slip });
@@ -315,7 +315,7 @@ router.delete('/slips/:slip_id/:boat_id', function (req, res) {
                             //var boatID = req.params.boat_id; 
                             //slip[0].current_boat = parseInt(boat.id, 10); 
                             var slipNumber = slip[0].number; 
-                            boat_departs_slip(req.params.slip_id, req.params.boat_id, slipNumber); 
+                            boat_departs_slip(req.params.slip_id, slipNumber); 
                             res.status(204).end(); 
                         }
                     })
@@ -351,23 +351,25 @@ router.delete('/boats/:boat_id', function(req, res) {
             }
             else
             {
-                const slips = get_slips();
-                for(var i = 0; i < slips.length; i++)
-                {
+                const slips = get_slips().then((slips) => { 
+                    for(var i = 0; i < slips.length; i++)
+                    {
                     //if(slips[i].current_boat === req.params.boat_id)
                     //if(slips[i].current_boat === boat[0].id)
                     //if(slips[i].current_boat == boat[0].id)
-                    if(slips[i].current_boat !== null)
-                    {
-                        if(slips[i].current_boat == boat[0].id)
+                        if(slips[i].current_boat !== null)
                         {
-                            var slipsID = slips[i].id; 
-                            var boatID = boat[0].id;
-                            var slipsNum = slips[i].number; 
-                            boat_departs_slip(slipsID, boatID, slipsNum); 
+                            //if(slips[i].current_boat == boat[0].id)
+                            if(slips[i].current_boat == req.params.boat_id)
+                            {
+                                var slipsID = slips[i].id; 
+                                var slipsNum = slips[i].number; 
+                                boat_departs_slip(slipsID, slipsNum); 
+                            }
                         }
                     }
-                }
+                }); 
+
                 delete_boat(req.params.boat_id).then(res.status(204).end()); 
             }
         })
