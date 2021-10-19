@@ -210,12 +210,20 @@ router.put('/lodgings/:id', function (req, res) {
         .then(res.status(200).end());
 });
 
+/*
+doSomething()
+.then(result => doSomethingElse(result))
+.then(newResult => doThirdThing(newResult))
+.then(finalResult => {
+  console.log(`Got the final result: ${finalResult}`);
+})
+*/ 
 
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
     
     get_slip(req.params.slip_id)
     
-    .then (slip => 
+    .then (slip => function(slip)
         {
             if (slip[0] === undefined || slip[0] === null) 
             {
@@ -225,22 +233,24 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 
             else if (slip[0].current_boat !== null)
             {
-                res.status(403).json({ 'Error': 'There is already a boat at this slip'}).end(); 
+                res.status(403).json({ 'Error': 'The slip is not empty'}).end(); 
             }
-            return; 
         })
     
-    .then (get_boat(req.params.boat_id).then(boat => 
+    .then (get_boat(req.params.boat_id))
+    
+    .then(boat => function(boat)
         {
             if (boat[0] === undefined || boat[0] === null) 
             {
                 // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
             }
-            return; 
-        }))
+        })
 
-    .then (put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end())); 
+    .then (put_boat_in_slip(req.params.slip_id, req.params.boat_id))
+    
+    .then(res.status(204).end() ); 
 }); 
 
 
