@@ -134,14 +134,19 @@ function put_lodging(id, name, description, price) {
     return datastore.save({ "key": key, "data": lodging });
 }
 
-/*
-function put_boat_in_slip(slip_id, boat_id) {
+function patch_boat(id, name, type, length) {
+    const key = datastore.key([BOAT, parseInt(id, 10)]);
+    const boat = { "name": name, "type": type, "length": length };
+    return datastore.save({ "key": key, "data": boat });
+}
+
+
+function put_boat_in_slip(slip_id, boat_id, number) {
     const slip_key = datastore.key([SLIP, parseInt(slip_id, 10)]);
-    return datastore.get(slip_key).then((entity) => {
-            entity[0].current_boat = boat_id; 
-        }); 
+    const slip = {"number": number, "current_boat": boat_id}; 
+    return datastore.save({ "key": slip_key, "data": slip });
     }
-*/
+
 
 /* ------------- End Model Functions ------------- */
 
@@ -210,49 +215,7 @@ router.put('/lodgings/:id', function (req, res) {
         .then(res.status(200).end());
 });
 
-/*
-doSomething()
-.then(result => doSomethingElse(result))
-.then(newResult => doThirdThing(newResult))
-.then(finalResult => {
-  console.log(`Got the final result: ${finalResult}`);
-})
-*/ 
 
-/*
-router.put('/slips/:slip_id/:boat_id', function (req, res) {
-    get_slip(req.params.slip_id)
-    .then (slip => function(slip)
-        {
-            if (slip[0] === undefined || slip[0] === null) 
-            {
-                // The 0th element is undefined. This means there is no lodging with this id
-                res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
-            }
-
-            else if (slip[0].current_boat !== null)
-            {
-                res.status(403).json({ 'Error': 'The slip is not empty'}).end(); 
-            }
-        })
-    
-    .then (get_boat(req.params.boat_id))
-    .then(boat => function(boat)
-        {
-            if (boat[0] === undefined || boat[0] === null) 
-            {
-                // The 0th element is undefined. This means there is no lodging with this id
-                res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
-            }
-            else
-            {
-
-            }
-        })
-    .then (put_boat_in_slip(req.params.slip_id, req.params.boat_id))
-    .then(res.status(204).end() ); 
-}); 
-*/
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
     get_boat(req.params.boat_id)
     .then(boat => 
@@ -283,8 +246,8 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                         {
                             //var boatID = req.params.boat_id; 
                             //slip[0].current_boat = parseInt(boat.id, 10); 
-                            slip[0].current_boat = "test succeeded"; 
-                            res.status(201).send(slip[0]); 
+                            put_boat_in_slip(slip_id, boat_id, slip[0].number); 
+                            res.status(204).end(); 
                         }
                     })
                 }
@@ -346,9 +309,10 @@ router.patch('/boats/:id', function (req, res) {
                 res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
             } else {
                 // Return the 0th element which is the boat with this id
-                boat[0].name = req.body.name;
-                boat[0].type = req.body.type;
-                boat[0].length = req.body.length;
+                patch_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
+                //boat[0].name = req.body.name;
+                //boat[0].type = req.body.type;
+                //boat[0].length = req.body.length;
                 boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
                 res.status(200).json(boat[0]);
             }
