@@ -253,8 +253,8 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
     .then(res.status(204).end() ); 
 }); 
 */
-router.put('/slips/:slipId/:boatId', function (req, res) {
-    get_boat(req.params.boatId)
+router.put('/slips/:slip_id/:boat_id', function (req, res) {
+    get_boat(req.params.boat_id)
     .then(boat => 
         {
             if (boat[0] === undefined || boat[0] === null) 
@@ -265,7 +265,7 @@ router.put('/slips/:slipId/:boatId', function (req, res) {
 
             else
             {
-                get_slip(req.params.slipId)
+                get_slip(req.params.slip_id)
                 .then (slip =>
                     {
                         if (slip[0] === undefined || slip[0] === null) 
@@ -282,8 +282,8 @@ router.put('/slips/:slipId/:boatId', function (req, res) {
                         else
                         {
                             //var boatID = req.params.boat_id; 
-                            slip[0].current_boat = req.params.boatId; 
-                            res.status(204).end(); 
+                            slip[0].current_boat = parseInt(boat.id, 10); 
+                            res.status(204).json(slip[0]); 
                         }
                     })
                 }
