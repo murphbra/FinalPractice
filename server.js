@@ -142,9 +142,9 @@ function patch_boat(id, name, type, length) {
 
 
 function put_boat_in_slip(slip_id, boat_id, number) {
-    const slip_key = datastore.key([SLIP, parseInt(slip_id, 10)]);
-    const slip = {"number": number, "current_boat": boat_id}; 
-    return datastore.save({ "key": slip_key, "data": slip });
+    const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
+    const slip = { "number": number, "current_boat": boat_id}; 
+    return datastore.save({ "key": key, "data": slip });
     }
 
 
@@ -246,7 +246,8 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                         {
                             //var boatID = req.params.boat_id; 
                             //slip[0].current_boat = parseInt(boat.id, 10); 
-                            put_boat_in_slip(slip_id, boat_id, slip[0].number); 
+                            var slipNumber = slip[0].number; 
+                            put_boat_in_slip(req.params.slip_id, req.params.boat_id, slipNumber); 
                             res.status(204).end(); 
                         }
                     })
