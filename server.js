@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 
 const datastore = new Datastore();
 
-//const LODGING = "Lodging";
 const BOAT = "Boat"; 
 
 const SLIP = "Slip"; 
@@ -24,13 +23,7 @@ function fromDatastore(item) {
 
 app.set('trust proxy', true); 
 /* ------------- Begin Lodging Model Functions ------------- */
-/*
-function post_lodging(name, description, price) {
-    var key = datastore.key(LODGING);
-    const new_lodging = { "name": name, "description": description, "price": price };
-    return datastore.save({ "key": key, "data": new_lodging }).then(() => { return key });
-}
-*/
+
 function post_boat(name, type, length) {
     var key = datastore.key(BOAT);
     const new_boat = { "name": name, "type": type, "length": length };
@@ -119,12 +112,12 @@ function boat_departs_slip(slip_id, boat_id, number) {
     }
 
 function delete_slip(id) {
-    const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
+    const key = datastore.key([SLIP, parseInt(id, 10)]);
     return datastore.delete(key); 
 }
 
 function delete_boat(id) {
-    const key = datastore.key([BOAT, parseInt(slip_id, 10)]);
+    const key = datastore.key([BOAT, parseInt(id, 10)]);
     return datastore.delete(key); 
 }
 
@@ -230,11 +223,6 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 }); 
 
 
-/**
- * This route is not in the file discussed in the video. It demonstrates how to
- * get a single lodging from Datastore using the provided id and also how to 
- * determine when no lodging exists with that ID.
- */
 router.get('/boats/:id', function (req, res) {
     get_boat(req.params.id)
         .then(boat => {
@@ -346,7 +334,7 @@ router.delete('/slips/:slip_id', function(req, res) {
             }
             else
             {
-                delete_slip(req.params.slip_id).then(res.status(204).end())
+                delete_slip(req.params.slip_id).then(res.status(204).end()); 
             }
 
 }); 
@@ -370,9 +358,8 @@ router.delete('/boats/:boat_id', function(req, res) {
                         boat_departs_slip(slips[i].id, boat.id, slips[i].number); 
                     }
                 }
-                delete_boat(req.params.boat_id).then(res.status(204).end())
+                delete_boat(req.params.boat_id).then(res.status(204).end()); 
             }
-
 }); 
 
 /* ------------- End Controller Functions ------------- */
