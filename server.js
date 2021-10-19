@@ -310,9 +310,9 @@ router.patch('/boats/:id', function (req, res) {
             } else {
                 // Return the 0th element which is the boat with this id
                 patch_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
-                //boat[0].name = req.body.name;
-                //boat[0].type = req.body.type;
-                //boat[0].length = req.body.length;
+                boat[0].name = req.body.name;
+                boat[0].type = req.body.type;
+                boat[0].length = req.body.length;
                 boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
                 res.status(200).json(boat[0]);
             }
