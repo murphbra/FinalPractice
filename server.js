@@ -356,7 +356,8 @@ router.delete('/boats/:boat_id', function(req, res) {
                 {
                     //if(slips[i].current_boat === req.params.boat_id)
                     //if(slips[i].current_boat === boat[0].id)
-                    if(slips[i].current_boat == boat[0].id)
+                    //if(slips[i].current_boat == boat[0].id)
+                    if(slips[i].current_boat == req.params.boat_id)
                     {
                         boat_departs_slip(slips[i].id, boat[0].id, slips[i].number); 
                     }
