@@ -71,34 +71,6 @@ function get_slips() {
         return entities[0].map(fromDatastore);
     });
 }
-/**
- * This function is not in the code discussed in the video. It demonstrates how
- * to get a single entity from Datastore using an id.
- * Note that datastore.get returns an array where each element is a JSON object 
- * corresponding to an entity of the Type "Lodging." If there are no entities
- * in the result, then the 0th element is undefined.
- * @param {number} id Int ID value
- * @returns An array of length 1.
- *      If a lodging with the provided id exists, then the element in the array
- *           is that lodging
- *      If no lodging with the provided id exists, then the value of the 
- *          element is undefined
- */
-/*
-function get_lodging(id) {
-    const key = datastore.key([LODGING, parseInt(id, 10)]);
-    return datastore.get(key).then((entity) => {
-        if (entity[0] === undefined || entity[0] === null) {
-            // No entity found. Don't try to add the id attribute
-            return entity;
-        } else {
-            // Use Array.map to call the function fromDatastore. This function
-            // adds id attribute to every element in the array entity
-            return entity.map(fromDatastore);
-        }
-    });
-}
-*/
 
 function get_boat(id) {
     const key = datastore.key([BOAT, parseInt(id, 10)]);
@@ -128,18 +100,11 @@ function get_slip(id) {
     });
 }
 
-function put_lodging(id, name, description, price) {
-    const key = datastore.key([LODGING, parseInt(id, 10)]);
-    const lodging = { "name": name, "description": description, "price": price };
-    return datastore.save({ "key": key, "data": lodging });
-}
-
 function patch_boat(id, name, type, length) {
     const key = datastore.key([BOAT, parseInt(id, 10)]);
     const boat = { "name": name, "type": type, "length": length };
     return datastore.save({ "key": key, "data": boat });
 }
-
 
 function put_boat_in_slip(slip_id, boat_id, number) {
     const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
@@ -153,6 +118,15 @@ function boat_departs_slip(slip_id, boat_id, number) {
     return datastore.save({ "key": key, "data": slip });
     }
 
+function delete_slip(id) {
+    const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
+    return datastore.delete(key); 
+}
+
+function delete_boat(id) {
+    const key = datastore.key([BOAT, parseInt(slip_id, 10)]);
+    return datastore.delete(key); 
+}
 
 /* ------------- End Model Functions ------------- */
 
@@ -215,12 +189,6 @@ router.post('/slips', function (req, res) {
         }); 
     }
 });
-
-router.put('/lodgings/:id', function (req, res) {
-    put_lodging(req.params.id, req.body.name, req.body.description, req.body.price)
-        .then(res.status(200).end());
-});
-
 
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
     get_boat(req.params.boat_id)
@@ -366,6 +334,47 @@ router.delete('/slips/:slip_id/:boat_id', function (req, res) {
                 }
         })
 }); 
+
+router.delete('/slips/:slip_id', function(req, res) {
+    get_slip(req.params.slip_id)
+    .then (slip =>
+        {
+            if (slip[0] === undefined || slip[0] === null) 
+            {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'No slip with this slip_id exists' }).end(); 
+            }
+            else
+            {
+                delete_slip(req.params.slip_id).then(res.status(204).end())
+            }
+
+}); 
+
+router.delete('/boats/:boat_id', function(req, res) {
+    get_boat(req.params.boat_id)
+    .then (boat =>
+        {
+            if (boat[0] === undefined || boat[0] === null) 
+            {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'No boat with this boat_id exists' }).end(); 
+            }
+            else
+            {
+                const slips = get_slips();
+                for(var i = 0; i < slips.length; i++)
+                {
+                    if(slips[i].current_boat == boat.id)
+                    {
+                        boat_departs_slip(slips[i].id, boat.id, slips[i].number); 
+                    }
+                }
+                delete_boat(req.params.boat_id).then(res.status(204).end())
+            }
+
+}); 
+
 /* ------------- End Controller Functions ------------- */
 
 app.use('/', router);
