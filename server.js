@@ -254,7 +254,9 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 }); 
 */
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
-    get_boat(req.params.boat_id).then(boat => 
+    get_boat(req.params.boat_id)
+    
+    .then(boat => 
         {
             if (boat[0] === undefined || boat[0] === null) 
             {
