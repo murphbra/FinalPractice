@@ -1,4 +1,6 @@
-//test comment!!!!!!
+//Author: Brayden Murphy
+//CS 493 Assignment 3
+// Adapted from example code provided in course materials for CS 493 
 
 const express = require('express');
 const app = express();
@@ -189,7 +191,6 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
         {
             if (boat[0] === undefined || boat[0] === null) 
             {
-                // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
             }
 
@@ -200,7 +201,6 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                     {
                         if (slip[0] === undefined || slip[0] === null) 
                         {
-                            // The 0th element is undefined. This means there is no lodging with this id
                             res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
                         }
             
@@ -211,8 +211,6 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 
                         else
                         {
-                            //var boatID = req.params.boat_id; 
-                            //slip[0].current_boat = parseInt(boat.id, 10); 
                             var slipNumber = slip[0].number; 
                             put_boat_in_slip(req.params.slip_id, req.params.boat_id, slipNumber); 
                             res.status(204).end(); 
@@ -227,10 +225,8 @@ router.get('/boats/:id', function (req, res) {
     get_boat(req.params.id)
         .then(boat => {
             if (boat[0] === undefined || boat[0] === null) {
-                // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
             } else {
-                // Return the 0th element which is the boat with this id
                 boat[0].self = "https://cs493a3.wm.r.appspot.com/boats/" + boat[0].id; 
                 res.status(200).json(boat[0]);
             }
@@ -241,10 +237,8 @@ router.get('/slips/:id', function (req, res) {
     get_slip(req.params.id)
         .then(slip => {
             if (slip[0] === undefined || slip[0] === null) {
-                // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'No slip with this slip_id exists' });
             } else {
-                // Return the 0th element which is the boat with this id
                 slip[0].self = "https://cs493a3.wm.r.appspot.com/slips/" + slip[0].id; 
                 res.status(200).json(slip[0]);
             }
@@ -268,10 +262,8 @@ router.patch('/boats/:id', function (req, res) {
         get_boat(req.params.id)
         .then(boat => {
             if (boat[0] === undefined || boat[0] === null) {
-                // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
             } else {
-                // Return the 0th element which is the boat with this id
                 patch_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
                 boat[0].name = req.body.name;
                 boat[0].type = req.body.type;
@@ -290,7 +282,6 @@ router.delete('/slips/:slip_id/:boat_id', function (req, res) {
         {
             if (boat[0] === undefined || boat[0] === null) 
             {
-                // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'No boat with this boat_id is at the slip with this slip_id' }).end(); 
             }
 
@@ -301,7 +292,6 @@ router.delete('/slips/:slip_id/:boat_id', function (req, res) {
                     {
                         if (slip[0] === undefined || slip[0] === null) 
                         {
-                            // The 0th element is undefined. This means there is no lodging with this id
                             res.status(404).json({ 'Error': 'No boat with this boat_id is at the slip with this slip_id' }).end(); 
                         }
             
@@ -312,8 +302,6 @@ router.delete('/slips/:slip_id/:boat_id', function (req, res) {
 
                         else
                         {
-                            //var boatID = req.params.boat_id; 
-                            //slip[0].current_boat = parseInt(boat.id, 10); 
                             var slipNumber = slip[0].number; 
                             boat_departs_slip(req.params.slip_id, slipNumber); 
                             res.status(204).end(); 
@@ -354,12 +342,8 @@ router.delete('/boats/:boat_id', function(req, res) {
                 const slips = get_slips().then((slips) => { 
                     for(var i = 0; i < slips.length; i++)
                     {
-                    //if(slips[i].current_boat === req.params.boat_id)
-                    //if(slips[i].current_boat === boat[0].id)
-                    //if(slips[i].current_boat == boat[0].id)
                         if(slips[i].current_boat !== null)
                         {
-                            //if(slips[i].current_boat == boat[0].id)
                             if(slips[i].current_boat == req.params.boat_id)
                             {
                                 var slipsID = slips[i].id; 
