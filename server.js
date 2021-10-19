@@ -336,6 +336,7 @@ router.delete('/slips/:slip_id', function(req, res) {
             {
                 delete_slip(req.params.slip_id).then(res.status(204).end()); 
             }
+        })
 
 }); 
 
@@ -360,6 +361,7 @@ router.delete('/boats/:boat_id', function(req, res) {
                 }
                 delete_boat(req.params.boat_id).then(res.status(204).end()); 
             }
+        })
 }); 
 
 /* ------------- End Controller Functions ------------- */
