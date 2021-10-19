@@ -255,7 +255,6 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
 */
 router.put('/slips/:slip_id/:boat_id', function (req, res) {
     get_boat(req.params.boat_id)
-    
     .then(boat => 
         {
             if (boat[0] === undefined || boat[0] === null) 
@@ -263,27 +262,30 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                 // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
             }
-        })
 
-    .then (get_slip(req.params.slip_id))
-
-    .then (slip =>
-        {
-            if (slip[0] === undefined || slip[0] === null) 
-            {
-                // The 0th element is undefined. This means there is no lodging with this id
-                res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
-            }
-
-            else if (slip[0].current_boat !== null)
-            {
-                res.status(403).json({ 'Error': 'The slip is not empty'}).end(); 
-            }
             else
             {
-                slip.current_boat = req.params.boat_id; 
-                res.status(204).end(); 
-            }
+                get_slip(req.params.slip_id)
+                .then (slip =>
+                    {
+                        if (slip[0] === undefined || slip[0] === null) 
+                        {
+                            // The 0th element is undefined. This means there is no lodging with this id
+                            res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
+                        }
+            
+                        else if (slip[0].current_boat !== null)
+                        {
+                            res.status(403).json({ 'Error': 'The slip is not empty'}).end(); 
+                        }
+
+                        else
+                        {
+                            slip.current_boat = req.params.boat_id; 
+                            res.status(204).end(); 
+                        }
+                    })
+                }
         })
 }); 
 
