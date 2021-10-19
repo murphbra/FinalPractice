@@ -283,6 +283,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                         {
                             //var boatID = req.params.boat_id; 
                             slip[0].current_boat = parseInt(boat.id, 10); 
+                            slip[0].test = "test succeeded"; 
                             res.status(201).send(slip[0]); 
                         }
                     })
