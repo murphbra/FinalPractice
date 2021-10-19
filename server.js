@@ -147,6 +147,12 @@ function put_boat_in_slip(slip_id, boat_id, number) {
     return datastore.save({ "key": key, "data": slip });
     }
 
+function boat_departs_slip(slip_id, boat_id, number) {
+    const key = datastore.key([SLIP, parseInt(slip_id, 10)]);
+    const slip = { "number": number, "current_boat": null}; 
+    return datastore.save({ "key": key, "data": slip });
+    }
+
 
 /* ------------- End Model Functions ------------- */
 
@@ -321,6 +327,45 @@ router.patch('/boats/:id', function (req, res) {
 
     }
 });
+
+router.delete('/slips/:slip_id/:boat_id', function (req, res) {
+    get_boat(req.params.boat_id)
+    .then(boat => 
+        {
+            if (boat[0] === undefined || boat[0] === null) 
+            {
+                // The 0th element is undefined. This means there is no lodging with this id
+                res.status(404).json({ 'Error': 'No boat with this boat_id is at the slip with this slip_id' }).end(); 
+            }
+
+            else
+            {
+                get_slip(req.params.slip_id)
+                .then (slip =>
+                    {
+                        if (slip[0] === undefined || slip[0] === null) 
+                        {
+                            // The 0th element is undefined. This means there is no lodging with this id
+                            res.status(404).json({ 'Error': 'No boat with this boat_id is at the slip with this slip_id' }).end(); 
+                        }
+            
+                        else if (slip[0].current_boat != boat[0].id)
+                        {
+                            res.status(404).json({ 'Error': 'No boat with this boat_id is at the slip with this slip_id'}).end(); 
+                        }
+
+                        else
+                        {
+                            //var boatID = req.params.boat_id; 
+                            //slip[0].current_boat = parseInt(boat.id, 10); 
+                            var slipNumber = slip[0].number; 
+                            boat_departs_slip(req.params.slip_id, req.params.boat_id, slipNumber); 
+                            res.status(204).end(); 
+                        }
+                    })
+                }
+        })
+}); 
 /* ------------- End Controller Functions ------------- */
 
 app.use('/', router);
