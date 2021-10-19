@@ -227,6 +227,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
             {
                 res.status(403).json({ 'Error': 'There is already a boat at this slip'}).end(); 
             }
+            return; 
         })
     
     .then (get_boat(req.params.boat_id).then(boat => 
@@ -236,6 +237,7 @@ router.put('/slips/:slip_id/:boat_id', function (req, res) {
                 // The 0th element is undefined. This means there is no lodging with this id
                 res.status(404).json({ 'Error': 'The specified boat and/or slip does not exist' }).end(); 
             }
+            return; 
         }))
 
     .then (put_boat_in_slip(req.params.slip_id, req.params.boat_id).then(res.status(204).end())); 
