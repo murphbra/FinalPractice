@@ -138,21 +138,25 @@ router.post('/boats', function (req, res) {
             }
         }
         get_boats().then((boats) => {
+            var repeat = false; 
             for(var i=0; i<boats.length; i++)
             {
                 if(boats[i].name == req.body.name)
                 {
                     res.status(403).json({'Error': 'A boat with that name already exists'}).end(); 
-                    return 0; 
+                    repeat = true; 
                 }
             }
-        }).then( (value) => { 
-            post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
-                new_boat.self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + new_boat.id; 
-                res.status(201).json(new_boat); 
-                return; 
-            }); 
-
+            return repeat; 
+        }).then( (repeat) => { 
+            if(!repeat)
+            {
+                post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
+                    new_boat.self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + new_boat.id; 
+                    res.status(201).json(new_boat); 
+                    return; 
+                }); 
+            }
         }); 
     }
 });
