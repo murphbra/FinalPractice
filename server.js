@@ -276,15 +276,15 @@ router.patch('/boats/:id', function (req, res) {
         return; 
     }
     const attributes = Object.keys(req.body); 
-    const accepted = ['name', 'type', 'length']; 
+    const accepted = ["name", "type", "length"]; 
     for(var y = 0; y< attributes.length; y++)
     {
-        if(!accepted.includes(attributes[y]))
+        if(!(accepted.includes(attributes[y])))
         {
             res.status(400).json({'Error': 'The request included at least one non-supported attribute'}).end();
             return; 
         }
-        if(attributes.includes('name'))
+        if(attributes.includes("name"))
         {
             var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
             for(var x=0; x<req.body.name;x++)
@@ -307,7 +307,7 @@ router.patch('/boats/:id', function (req, res) {
                 var repeat = false; 
                 for(var i=0; i<boats.length; i++)
                 {
-                    if(attributes.includes('name'))
+                    if(attributes.includes("name"))
                     {
                         if(boats[i].name == req.body.name && boats[i].id != req.params.id)
                         {
@@ -321,7 +321,7 @@ router.patch('/boats/:id', function (req, res) {
             }).then( (repeat) => {
                 if(!repeat)
                 {
-                    if(attributes.includes('name'))
+                    if(attributes.includes("name"))
                     {
                         var name = req.body.name; 
                     }
@@ -330,7 +330,7 @@ router.patch('/boats/:id', function (req, res) {
                         var name = boats[0].name; 
                     }
 
-                    if(attributes.includes('type'))
+                    if(attributes.includes("type"))
                     {
                         var type = req.body.type; 
                     }
@@ -339,7 +339,7 @@ router.patch('/boats/:id', function (req, res) {
                         var type = boats[0].type; 
                     }
                     
-                    if(attributes.includes('length'))
+                    if(attributes.includes("length"))
                     {
                         var length = req.body.length; 
                     }
