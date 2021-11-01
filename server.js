@@ -154,14 +154,18 @@ router.get('/boats/:id', function (req, res) {
             } else {
                 boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
                 const accepts = req.accepts(['application/json', 'text/html']);
-                if(!accepts){
+                if(!accepts)
+                {
                     res.status(406).send('Not Acceptable');
-                } else if(accepts === 'application/json'){
+                } 
+                else if(accepts === 'application/json')
+                {
                     res.status(200).json(boat[0]);
-                } else if(accepts === 'text/html'){
+                } 
+                else if(accepts === 'text/html')
+                {
                     res.status(200).send(json2html(boat[0]).slice(1,-1));
                 } 
-                res.status(200).json(boat[0]);
             }
         });
 });
