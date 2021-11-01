@@ -292,9 +292,7 @@ router.patch('/boats/:id', function (req, res){
             return; 
         }
     }
-    res.status(200).json(results).end(); 
-}); 
-    /*
+
     if(attributes.includes("name"))
     {
         var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
@@ -307,7 +305,9 @@ router.patch('/boats/:id', function (req, res){
             }
         }
     }
-    
+    res.status(200).json(results).end(); 
+}); 
+    /*
     get_boat(req.params.id)
     .then(boat => {
         if(boat[0] === undefined || boat[0] === null){
