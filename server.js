@@ -227,6 +227,16 @@ router.delete('/boats', function (req, res){
     res.status(405).end();
 });
 
+router.delete('/clear', function(req, res) {
+    get_boats().then  ( (boats) => {
+        for(var i = 0; i<boats.length; i++)
+        {
+            delete_boat(boats[i].id); 
+        }
+
+    })
+})
+
 /* ------------- End Controller Functions ------------- */
 
 app.use('/', router);
