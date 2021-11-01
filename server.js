@@ -250,7 +250,7 @@ router.put('/boats/:id', function (req, res) {
                 }).then( (repeat) => {
                     if(!repeat)
                     {
-                        put_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
+                        //put_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
                         boat[0].name = req.body.name;
                         boat[0].type = req.body.type;
                         boat[0].length = req.body.length;
