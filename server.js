@@ -279,37 +279,32 @@ router.patch('/boats/:id', function (req, res){
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
-    
+
+    const accepted = ["name", "type", "length"]; 
     const attributes = Object.keys(req.body); 
-    var results = {}; 
-    results.body = attributes; 
-    res.status(200).json(results).end(); 
-}); 
-        /*
-        const accepted = ["name", "type", "length"]; 
-        for(var y = 0; y< attributes.length; y++)
+
+    for(var y = 0; y< attributes.length; y++)
+    {
+        if(!accepted.includes(attributes[y]))
         {
-            if(!accepted.includes(attributes[y]))
+            res.status(400).json({'Error': "The request included at least one non-supported attribute"}).end();
+            return; 
+        }
+    }
+}); 
+    /*
+    if(attributes.includes("name"))
+    {
+        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
+        for(var x=0; x<req.body.name.length; x++)
+        {
+            if(!alphaNum.includes(req.body.name[x]))
             {
-                res.status(400).json({'Error': "The request included at least one non-supported attribute"}).end();
+                res.status(400).json({'Error': 'Boat name characters must be alphanumeric'}).end();
                 return; 
             }
         }
-        if(attributes.includes("name"))
-            {
-                var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
-                for(var x=0; x<req.body.name.length; x++)
-                {
-                    if(!alphaNum.includes(req.body.name[x]))
-                    {
-                        res.status(400).json({'Error': 'Boat name characters must be alphanumeric'}).end();
-                        return; 
-                    }
-                }
-            }
-        
-    });
-}); 
+    }
     
     get_boat(req.params.id)
     .then(boat => {
