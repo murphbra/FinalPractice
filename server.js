@@ -312,9 +312,10 @@ router.patch('/boats/:id', function (req, res) {
         {
             get_boats().then((boats) => {
                 var repeat = false; 
-                for(var i=0; i<boats.length; i++)
+                //for(var i=0; i<boats.length; i++)
+                if(attributes.includes("name"))
                 {
-                    if(attributes.includes("name"))
+                    for(var i=0; i<boats.length; i++)
                     {
                         if(boats[i].name == req.body.name && boats[i].id != req.params.id)
                         {
@@ -324,7 +325,7 @@ router.patch('/boats/:id', function (req, res) {
                         
                     }
                 }
-                return repeat; 
+                results.duplicate = repeat; 
             }); 
         }
         res.status(200).json(results).end(); 
