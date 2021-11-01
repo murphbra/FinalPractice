@@ -62,7 +62,7 @@ function get_boat(id) {
     });
 }
 
-function patch_boat(id, name, type, length) {
+function put_boat(id, name, type, length) {
     const key = datastore.key([BOAT, parseInt(id, 10)]);
     const boat = { "name": name, "type": type, "length": length };
     return datastore.save({ "key": key, "data": boat });
@@ -186,7 +186,18 @@ router.get('/boats/:id', function (req, res) {
         });
 });
 
-router.patch('/boats/:id', function (req, res) {
+router.put('/boats/:id', function (req, res) {
+    if(req.get('content-type') !== 'application/json'){
+        res.status(415).json({'Error': 'Server only accepts application/json data.'}).end(); 
+        return; 
+    }
+    const accepts = req.accepts(['application/json']); 
+    if(!accepts)
+    {
+        res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
+        return; 
+    }
+
     if(req.body.length === undefined)
     {
         res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
@@ -200,20 +211,56 @@ router.patch('/boats/:id', function (req, res) {
         res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
     }
     else{
+        const attributes = Object.keys(req.body);
+        if(attributes.length > 3)
+        {
+            res.status(400).json({'Error': 'The request included at least one non-supported attribute'}).end(); 
+            return; 
+        }
+        if(req.body.name.length > 20)
+        {
+            res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
+            return; 
+        }
+        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
+        for(var x=0; x<req.body.name.length; x++)
+        {
+            if(!alphaNum.includes(req.body.name[x]))
+            {
+                res.status(400).json({'Error': 'Boat name characters must be alphanumeric'}).end();
+                return;  
+            }
+        }
         get_boat(req.params.id)
         .then(boat => {
             if (boat[0] === undefined || boat[0] === null) {
                 res.status(404).json({ 'Error': 'No boat with this boat_id exists' });
             } else {
-                patch_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
-                boat[0].name = req.body.name;
-                boat[0].type = req.body.type;
-                boat[0].length = req.body.length;
-                boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
-                res.status(200).json(boat[0]);
+                get_boats().then((boats) => {
+                    var repeat = false;
+                    for(var i=0; i<boats.length; i++)
+                    {
+                        if(boats[i].name == req.body.name && boats[i].id != req.params.id)
+                        {
+                            res.status(403).json({'Error': 'A boat with that name already exists'}).end();
+                            repeat = true; 
+                        }
+                    }
+                    return repeat; 
+                }).then( (repeat) => {
+                    if(!repeat)
+                    {
+                        put_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
+                        boat[0].name = req.body.name;
+                        boat[0].type = req.body.type;
+                        boat[0].length = req.body.length;
+                        boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
+                        res.status(200).json(boat[0]).end();
+
+                    }
+                })
             }
         });
-
     }
 });
 
