@@ -285,7 +285,9 @@ router.patch('/boats/:id', function (req, res) {
 
     get_keys(req)
     .then(attributes => {
-        res.status(400).send(attributes).end(); 
+        var results = {}; 
+        results.body = attributes; 
+        res.status(200).json(results).end(); 
 
         /*
         const accepted = ["name", "type", "length"]; 
@@ -372,7 +374,7 @@ router.patch('/boats/:id', function (req, res) {
         }
     })
     */
-})
+}); 
 
 router.delete('/boats/:boat_id', function(req, res) {
     get_boat(req.params.boat_id)
