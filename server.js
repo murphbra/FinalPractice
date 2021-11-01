@@ -91,24 +91,29 @@ router.get('/boats', function (req, res) {
 router.post('/boats', function (req, res) {
     if(req.get('content-type') !== 'application/json'){
         res.status(415).json({'Error': 'Server only accepts application/json data.'}).end(); 
+        return; 
     }
     const accepts = req.accepts(['application/json']); 
     if(!accepts)
     {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
+        return; 
     }
 
     if(req.body.length === undefined)
     {
         res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+        return; 
     } 
     else if(req.body.name === undefined)
     {
         res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+        return; 
     }
     else if(req.body.type === undefined)
     {
         res.status(400).json({ 'Error': 'The request object is missing at least one of the required attributes' }).end(); 
+        return; 
     }
     else 
     {
@@ -116,17 +121,20 @@ router.post('/boats', function (req, res) {
         if(attributes.length > 3)
         {
             res.status(400).json({'Error': 'The request included at least one non-supported attribute'}).end(); 
+            return; 
         }
         if(req.body.name.length > 20)
         {
             res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
+            return; 
         }
         var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
         for(var x=0; x<req.body.name.length; x++)
         {
             if(!alphaNum.includes(req.body.name[x]))
             {
-                res.status(400).json({'Error': 'Boat name characters must be alphanumeric'}).end(); 
+                res.status(400).json({'Error': 'Boat name characters must be alphanumeric'}).end();
+                return;  
             }
         }
         get_boats().then((boats) => {
@@ -135,12 +143,14 @@ router.post('/boats', function (req, res) {
                 if(boats[i].name == req.body.name)
                 {
                     res.status(403).json({'Error': 'A boat with that name already exists'}).end(); 
+                    return; 
                 }
             }
         })
         post_boat(req.body.name, req.body.type, req.body.length).then(new_boat => { 
             new_boat.self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + new_boat.id; 
             res.status(201).json(new_boat); 
+            return; 
         }); 
     }
 });
