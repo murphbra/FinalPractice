@@ -91,7 +91,8 @@ router.post('/boats', function (req, res) {
     if(req.get('content-type') !== 'application/json'){
         res.status(415).json({'Error': 'Server only accepts application/json data.'}).end(); 
     }
-    if(req.accepts !== 'application/json')
+    const accepts = req.accepts(['application/json']); 
+    if(!accepts)
     {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
     }
