@@ -269,7 +269,11 @@ router.put('/boats/:id', function (req, res) {
     }
 });
 
+
 router.patch('/boats/:id', function (req, res) {
+    res.status(200).json({'Test': "Confirmed"}).end(); 
+}); 
+    /*
 
     if(req.get('content-type') !== 'application/json')
     {
@@ -282,14 +286,13 @@ router.patch('/boats/:id', function (req, res) {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
-
     get_keys(req)
     .then(attributes => {
         var results = {}; 
         results.body = attributes; 
         res.status(200).json(results).end(); 
 
-        /*
+        
         const accepted = ["name", "type", "length"]; 
         for(var y = 0; y< attributes.length; y++)
         {
@@ -311,10 +314,8 @@ router.patch('/boats/:id', function (req, res) {
                     }
                 }
             }
-        */
+        
     });
-
-    /*
     get_boat(req.params.id)
     .then(boat => {
         if(boat[0] === undefined || boat[0] === null){
@@ -373,8 +374,8 @@ router.patch('/boats/:id', function (req, res) {
             })
         }
     })
-    */
 }); 
+*/
 
 router.delete('/boats/:boat_id', function(req, res) {
     get_boat(req.params.boat_id)
