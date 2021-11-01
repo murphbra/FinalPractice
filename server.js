@@ -156,7 +156,7 @@ router.get('/boats/:id', function (req, res) {
                 const accepts = req.accepts(['application/json', 'text/html']);
                 if(!accepts)
                 {
-                    res.status(406).send('Not Acceptable');
+                    res.status(406).json({'Error': 'Not Acceptable'});
                 } 
                 else if(accepts === 'application/json')
                 {
