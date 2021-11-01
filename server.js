@@ -73,8 +73,8 @@ function delete_boat(id) {
     return datastore.delete(key); 
 }
 
-function get_keys(body) {
-    const attributes = Object.keys(body);
+function get_keys(req) {
+    const attributes = Object.keys(req.body);
     return attributes; 
 }
 
@@ -280,12 +280,12 @@ router.patch('/boats/:id', function (req, res) {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
-    get_keys(req.body)
-    .then( (attributes) => {
+    get_keys(req)
+    .then(attributes => {
         const accepted = ["name", "type", "length"]; 
         for(var y = 0; y< attributes.length; y++)
         {
-            if(accepted.includes(attributes[y]) == false)
+            if(!accepted.includes(attributes[y]))
             {
                 res.status(400).json({'Error': "The request included at least one non-supported attribute"}).end();
                 return; 
@@ -293,7 +293,7 @@ router.patch('/boats/:id', function (req, res) {
             if(attributes.includes("name"))
             {
                 var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
-                for(var x=0; x<req.body.name;x++)
+                for(var x=0; x<req.body.length; x++)
                 {
                     if(!alphaNum.includes(req.body.name[x]))
                     {
@@ -303,7 +303,7 @@ router.patch('/boats/:id', function (req, res) {
                 }
             }
         }
-    })
+    });
 
     get_boat(req.params.id)
     .then(boat => {
