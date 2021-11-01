@@ -128,7 +128,7 @@ router.post('/boats', function (req, res) {
             res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
             return; 
         }
-        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
+        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
         for(var x=0; x<req.body.name.length; x++)
         {
             if(!alphaNum.includes(req.body.name[x]))
@@ -222,7 +222,7 @@ router.put('/boats/:id', function (req, res) {
             res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
             return; 
         }
-        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
+        var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
         for(var x=0; x<req.body.name.length; x++)
         {
             if(!alphaNum.includes(req.body.name[x]))
