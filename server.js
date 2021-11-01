@@ -280,12 +280,10 @@ router.patch('/boats/:id', function (req, res){
         return; 
     }
     
-    const attributes = Object.keys(req.body)
-    .then(attributes => {
-        var results = {}; 
-        results.body = attributes; 
-        res.status(200).json(results).end(); 
-    }); 
+    const attributes = Object.keys(req.body); 
+    var results = {}; 
+    results.body = attributes; 
+    res.status(200).json(results).end(); 
 }); 
         /*
         const accepted = ["name", "type", "length"]; 
