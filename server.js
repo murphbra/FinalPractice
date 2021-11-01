@@ -233,7 +233,7 @@ router.delete('/clear', function(req, res) {
         {
             delete_boat(boats[i].id); 
         }
-
+        res.status(204).end(); 
     })
 })
 
