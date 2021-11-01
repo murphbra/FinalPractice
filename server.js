@@ -256,7 +256,7 @@ router.put('/boats/:id', function (req, res) {
                         boat[0].length = req.body.length;
                         boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
                         res.location(boat[0].self); 
-                        res.status(303).end();
+                        res.status(303).json(boat[0]).end();
 
                     }
                 })
