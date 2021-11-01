@@ -283,6 +283,9 @@ router.patch('/boats/:id', function (req, res) {
 
     get_keys(req)
     .then(attributes => {
+        res.status(400).send(attributes).end(); 
+
+        /*
         const accepted = ["name", "type", "length"]; 
         for(var y = 0; y< attributes.length; y++)
         {
@@ -304,6 +307,7 @@ router.patch('/boats/:id', function (req, res) {
                     }
                 }
             }
+        */
     });
 
     get_boat(req.params.id)
