@@ -275,13 +275,14 @@ router.patch('/boats/:id', function (req, res) {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
+
     const attributes = Object.keys(req.body); 
     const accepted = ["name", "type", "length"]; 
     for(var y = 0; y< attributes.length; y++)
     {
-        if(!(accepted.includes(attributes[y])))
+        if(accepted.includes(attributes[y]))
         {
-            res.status(400).json({'Error': 'The request included at least one non-supported attribute'}).end();
+            res.status(400).json({'Error': attributes[y]}).end();
             return; 
         }
         if(attributes.includes("name"))
