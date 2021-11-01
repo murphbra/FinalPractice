@@ -121,7 +121,7 @@ router.post('/boats', function (req, res) {
             res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
         }
         var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; 
-        for(x=0;x<req.body.name.length;x++)
+        for(var x=0; x<req.body.name.length; x++)
         {
             if(!alphaNum.includes(req.body.name[x]))
             {
@@ -129,11 +129,11 @@ router.post('/boats', function (req, res) {
             }
         }
         get_boats().then((boats) => {
-            for(i=0;i<boats.length;i++)
+            for(var i=0; i<boats.length; i++)
             {
                 if(boats[i].name == req.body.name)
                 {
-                    res.status(403).json({'Error': 'A boat with that name already exits'}).end(); 
+                    res.status(403).json({'Error': 'A boat with that name already exists'}).end(); 
                 }
             }
         })
