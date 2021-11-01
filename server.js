@@ -251,11 +251,11 @@ router.put('/boats/:id', function (req, res) {
                     if(!repeat)
                     {
                         //put_boat(req.params.id, req.body.name, req.body.type, req.body.length); 
-                        boat[0].name = req.body.name;
-                        boat[0].type = req.body.type;
-                        boat[0].length = req.body.length;
-                        boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
-                        res.location(boat[0].self); 
+                        //boat[0].name = req.body.name;
+                        //boat[0].type = req.body.type;
+                        //boat[0].length = req.body.length;
+                        //boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id; 
+                        res.location('/escape'); 
                         res.status(303).json({'Test': "Confirmed"}).end();
 
                     }
