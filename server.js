@@ -73,10 +73,6 @@ function delete_boat(id) {
     return datastore.delete(key); 
 }
 
-function get_keys(req) {
-    const attributes = Object.keys(req.body);
-    return attributes; 
-}
 
 /* ------------- End Model Functions ------------- */
 
@@ -283,16 +279,15 @@ router.patch('/boats/:id', function (req, res){
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
-    res.status(200).json({"test": "confirmed"}).end(); 
-}); 
-    /*
-    get_keys(req)
+    
+    Object.keys(req.body)
     .then(attributes => {
         var results = {}; 
         results.body = attributes; 
         res.status(200).json(results).end(); 
-
-        
+    }); 
+}); 
+        /*
         const accepted = ["name", "type", "length"]; 
         for(var y = 0; y< attributes.length; y++)
         {
