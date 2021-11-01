@@ -279,7 +279,7 @@ router.patch('/boats/:id', function (req, res) {
     const accepted = ['name', 'type', 'length']; 
     for(attribute in attributes)
     {
-        if(!accepted.includes(attribute))
+        if(!(accepted.includes(attribute)))
         {
             res.status(400).json({'Error': 'The request included at least one non-supported attribute'}).end();
             return; 
