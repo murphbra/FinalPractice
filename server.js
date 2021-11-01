@@ -270,7 +270,9 @@ router.put('/boats/:id', function (req, res) {
 });
 
 router.patch('/boats/:id', function (req, res) {
-    if(req.get('content-type') !== 'application/json'){
+
+    if(req.get('content-type') !== 'application/json')
+    {
         res.status(415).json({'Error': 'Server only accepts application/json data.'}).end();
         return; 
     }
@@ -310,6 +312,7 @@ router.patch('/boats/:id', function (req, res) {
         */
     });
 
+    /*
     get_boat(req.params.id)
     .then(boat => {
         if(boat[0] === undefined || boat[0] === null){
@@ -368,7 +371,7 @@ router.patch('/boats/:id', function (req, res) {
             })
         }
     })
-
+    */
 })
 
 router.delete('/boats/:boat_id', function(req, res) {
