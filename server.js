@@ -266,8 +266,7 @@ router.put('/boats/:id', function (req, res) {
 });
 
 
-router.patch('/boats/:id', function (req, res){ 
-
+router.patch('/boats/:id', function (req, res) { 
     if(req.get('content-type') !== 'application/json')
     {
         res.status(415).json({'Error': 'Server only accepts application/json data.'}).end();
@@ -279,7 +278,6 @@ router.patch('/boats/:id', function (req, res){
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
-
     const accepted = ["name", "type", "length"]; 
     const attributes = Object.keys(req.body); 
     var results = {}; 
@@ -292,7 +290,6 @@ router.patch('/boats/:id', function (req, res){
             return; 
         }
     }
-
     if(attributes.includes("name"))
     {
         var alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "; 
@@ -305,15 +302,14 @@ router.patch('/boats/:id', function (req, res){
             }
         }
     }
-    res.status(200).json(results).end(); 
-}); 
-    /*
     get_boat(req.params.id)
     .then(boat => {
-        if(boat[0] === undefined || boat[0] === null){
+        if(boat[0] === undefined || boat[0] === null)
+        {
             res.status(404).json({'Error': 'No boat with this boat_id exists'});
         }
-        else {
+        else 
+        {
             get_boats().then((boats) => {
                 var repeat = false; 
                 for(var i=0; i<boats.length; i++)
@@ -329,7 +325,13 @@ router.patch('/boats/:id', function (req, res){
                     }
                 }
                 return repeat; 
-            }).then( (repeat) => {
+            }); 
+        }
+    }); 
+});  
+
+            /*
+            .then( (repeat) => {
                 if(!repeat)
                 {
                     if(attributes.includes("name"))
