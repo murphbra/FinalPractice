@@ -327,6 +327,7 @@ router.patch('/boats/:id', function (req, res) {
                 return repeat; 
             }); 
         }
+        res.status(200).json(results).end(); 
     }); 
 });  
 
