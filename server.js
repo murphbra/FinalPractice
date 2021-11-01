@@ -280,7 +280,7 @@ router.patch('/boats/:id', function (req, res){
         return; 
     }
     
-    Object.keys(req.body)
+    const attributes = Object.keys(req.body)
     .then(attributes => {
         var results = {}; 
         results.body = attributes; 
