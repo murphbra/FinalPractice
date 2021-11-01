@@ -282,7 +282,8 @@ router.patch('/boats/:id', function (req, res){
 
     const accepted = ["name", "type", "length"]; 
     const attributes = Object.keys(req.body); 
-
+    var results = {}; 
+    results.body = attributes; 
     for(var y = 0; y< attributes.length; y++)
     {
         if(!accepted.includes(attributes[y]))
@@ -291,6 +292,7 @@ router.patch('/boats/:id', function (req, res){
             return; 
         }
     }
+    res.status(200).json(results).end(); 
 }); 
     /*
     if(attributes.includes("name"))
