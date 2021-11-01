@@ -270,10 +270,7 @@ router.put('/boats/:id', function (req, res) {
 });
 
 
-router.patch('/boats/:id', function (req, res) {
-    res.status(200).json({'Test': "Confirmed"}).end(); 
-}); 
-    /*
+router.patch('/boats/:id', function (req, res){ 
 
     if(req.get('content-type') !== 'application/json')
     {
@@ -286,6 +283,9 @@ router.patch('/boats/:id', function (req, res) {
         res.status(406).json({'Error': 'Client must accept application/json'}).end(); 
         return; 
     }
+    res.status(200).json({"test": "confirmed"}).end(); 
+}); 
+    /*
     get_keys(req)
     .then(attributes => {
         var results = {}; 
@@ -316,6 +316,8 @@ router.patch('/boats/:id', function (req, res) {
             }
         
     });
+}); 
+    
     get_boat(req.params.id)
     .then(boat => {
         if(boat[0] === undefined || boat[0] === null){
