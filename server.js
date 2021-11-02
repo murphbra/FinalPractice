@@ -311,7 +311,7 @@ router.patch('/boats/:id', function (req, res) {
         else 
         {
             get_boats().then((boats) => {
-                results.duplicate = "false"; 
+                results.duplicate = false; 
                 //for(var i=0; i<boats.length; i++)
                 if(attributes.includes("name"))
                 {
@@ -320,7 +320,7 @@ router.patch('/boats/:id', function (req, res) {
                         if(boats[i].name == req.body.name && boats[i].id != req.params.id)
                         {
                             res.status(403).json({'Error': 'A boat with that name already exists'}).end();
-                            results.duplicate = "true"; 
+                            results.duplicate = true; 
                         }
                         
                     }
