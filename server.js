@@ -325,15 +325,10 @@ router.patch('/boats/:id', function (req, res) {
                         
                     }
                 }
-                res.status(200).json(results).end(); 
-            }); 
-        }
-    }); 
-});  
-
-            /*
-            .then( (repeat) => {
-                if(!repeat)
+                //res.status(200).json(results).end(); 
+                return results.duplicate; 
+            }).then ( (duplicate) => {
+                if(!duplicate)
                 {
                     if(attributes.includes("name"))
                     {
@@ -368,9 +363,8 @@ router.patch('/boats/:id', function (req, res) {
                 }
             })
         }
-    })
-}); 
-*/
+    }); 
+});  
 
 router.delete('/boats/:boat_id', function(req, res) {
     get_boat(req.params.boat_id)
