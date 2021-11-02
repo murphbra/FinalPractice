@@ -319,10 +319,9 @@ router.patch('/boats/:id', function (req, res) {
                     {
                         if(boats[i].name == req.body.name && boats[i].id != req.params.id)
                         {
-                            res.status(403).json({'Error': 'A boat with that name already exists'}).end();
                             duplicate = true; 
-                        }
-                        
+                            res.status(403).json({'Error': 'A boat with that name already exists'}).end();
+                        }  
                     }
                 }
                 return duplicate; 
@@ -335,7 +334,7 @@ router.patch('/boats/:id', function (req, res) {
                     } 
                     if(!attributes.includes("name")) 
                     {
-                        var name = boats[0].name;
+                        var name = boat[0].name;
                     } 
                     
                     if(attributes.includes("type")) 
@@ -344,7 +343,7 @@ router.patch('/boats/:id', function (req, res) {
                     } 
                     if(!attributes.includes("type")) 
                     {
-                        var type = boats[0].type; 
+                        var type = boat[0].type; 
                     } 
                     
                     if(attributes.includes("length")) 
@@ -353,7 +352,7 @@ router.patch('/boats/:id', function (req, res) {
                     } 
                     if(!attributes.includes("length")) 
                     {
-                        var length = boats[0].length; 
+                        var length = boat[0].length; 
                     } 
 
                     put_boat(req.params.id, name, type, length); 
