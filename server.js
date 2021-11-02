@@ -330,32 +330,32 @@ router.patch('/boats/:id', function (req, res) {
             }).then ( (duplicate) => {
                 if(!duplicate)
                 {
-                    if(attributes.includes("name"))
+                    if(attributes.includes("name")) 
                     {
                         var name = req.body.name; 
-                    }
-                    else
+                    } 
+                    if(!attributes.includes("name")) 
                     {
-                        var name = boats[0].name; 
-                    }
-
-                    if(attributes.includes("type"))
+                        var name = boats[0].name;
+                    } 
+                    
+                    if(attributes.includes("type")) 
                     {
                         var type = req.body.type; 
-                    }
-                    else
+                    } 
+                    if(!attributes.includes("type")) 
                     {
                         var type = boats[0].type; 
-                    }
+                    } 
                     
-                    if(attributes.includes("length"))
+                    if(attributes.includes("length")) 
                     {
                         var length = req.body.length; 
-                    }
-                    else
+                    } 
+                    if(!attributes.includes("length")) 
                     {
                         var length = boats[0].length; 
-                    }
+                    } 
 
                     put_boat(req.params.id, name, type, length); 
                     boat[0].name = name; 
@@ -364,7 +364,7 @@ router.patch('/boats/:id', function (req, res) {
                     boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id;
                     res.status(200).json(boat[0]).end(); 
                 }
-            })
+            }); 
         }
     }); 
 });  
