@@ -301,6 +301,11 @@ router.patch('/boats/:id', function (req, res) {
                 return; 
             }
         }
+        if(req.body.name.length > 20)
+        {
+            res.status(400).json({'Error': 'Boat name attribute must be 20 characters or less'}).end(); 
+            return; 
+        }
     }
     get_boat(req.params.id)
     .then(boat => {
