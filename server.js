@@ -326,6 +326,7 @@ router.patch('/boats/:id', function (req, res) {
                     }
                 }
             }); 
+            results.test = "confirmed"; 
             res.status(200).json(results).end(); 
         }
     }); 
