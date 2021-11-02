@@ -358,6 +358,9 @@ router.patch('/boats/:id', function (req, res) {
                     }
 
                     put_boat(req.params.id, name, type, length); 
+                    boat[0].name = name; 
+                    boat[0].type = type; 
+                    boat[0].length = length; 
                     boat[0].self = "https://cs493a5-330723.wm.r.appspot.com/boats/" + boat[0].id;
                     res.status(200).json(boat[0]).end(); 
                 }
