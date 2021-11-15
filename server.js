@@ -138,16 +138,18 @@ router.post('/', checkJwt, function(req, res){
 */
 router.post('/', checkJwt, function(err, req, res, next){
     if (err.name === 'UnauthorizedError') {
-        res.status(401).json({"Error": "JWT is invalid or missing"})
+        res.status(401).json({"Error": "JWT is invalid or missing"}).end(); 
     }
-    if(req.get('content-type') !== 'application/json'){
-        res.status(415).send('Server only accepts application/json data.')
+    else if(req.get('content-type') !== 'application/json'){
+        res.status(415).send('Server only accepts application/json data.').end(); 
     }
-    post_lodging(req.body.name, req.body.description, req.body.price, req.user.name)
-    .then( key => {
-        res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
-        res.status(201).send('{ "id": ' + key.id + ' }'); 
-    }); 
+    else {
+        post_lodging(req.body.name, req.body.description, req.body.price, req.user.name)
+        .then( key => {
+            res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
+            res.status(201).send('{ "id": ' + key.id + ' }'); 
+        }); 
+    }
 });
 
 login.post('/', function(req, res){
