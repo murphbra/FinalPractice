@@ -17,7 +17,7 @@ const datastore = new Datastore();
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
-const LODGING = "Lodging";
+const BOAT = "Boat";
 
 const router = express.Router();
 const login = express.Router();
@@ -47,28 +47,30 @@ const checkJwt = jwt({
   });
 
 /* ------------- Begin Lodging Model Functions ------------- */
-function post_lodging(name, description, price, owner){
-    var key = datastore.key(LODGING);
-	const new_lodging = {"name": name, "description": description, "price": price, "owner":owner};
-	return datastore.save({"key":key, "data":new_lodging}).then(() => {return key});
+function post_boat(name, type, length, public, owner){
+    var key = datastore.key(BOAT);
+	const new_boat = {"name": name, "type": type, "length": length, "public": public, "owner":owner};
+	return datastore.save({"key":key, "data":new_boat}).then(() => {
+        new_boat.id = key.id; 
+        return new_boat});
 }
 
-function get_lodgings(owner){
-	const q = datastore.createQuery(LODGING);
+function get_boats(owner){
+	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
 			return entities[0].map(fromDatastore).filter( item => item.owner === owner );
 		});
 }
 
-function get_lodgings_unprotected(){
-	const q = datastore.createQuery(LODGING);
+function get_boats_unprotected(){
+	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
 			return entities[0].map(fromDatastore);
 		});
 }
 
-function get_lodging(id, owner){
-    const key = datastore.key([LODGING, parseInt(id,10)]);
+function get_boat(id, owner){
+    const key = datastore.key([BOAT, parseInt(id,10)]);
     return datastore.get(key).then( (data) => {
             return fromDatastore(data[0]);
         }
@@ -116,13 +118,10 @@ router.get('/:id', checkJwt, function(req, res){
     });
 });
 
-router.post('/', checkJwt, function(req, res, err, next){
-    if(err.name === 'UnauthorizedError'){
-        res.status(401).send("JWT invalid/missing").end(); 
-    }
-
-    post_lodging(req.body.name, req.body.description, req.body.price, req.user.name); 
-    res.status(201).json({"Success": "post succeeded"}).end(); 
+router.post('/', checkJwt, function(req, res){
+    post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
+        res.status(201).json(boat).end(); 
+    }); 
 });
 
 login.post('/', function(req, res){
@@ -152,6 +151,13 @@ login.post('/', function(req, res){
 
 app.use('/lodgings', router);
 app.use('/login', login);
+
+app.use( function(err, req, res, next){
+    if (err.name === 'UnauthorizedError' && req.method=="GET" && req.path=='/boats') {
+        res.status(200).send('array of public json boat objects here'); 
+    }
+    next(); 
+}); 
 
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
