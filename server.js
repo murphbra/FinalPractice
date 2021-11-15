@@ -149,7 +149,7 @@ login.post('/', function(req, res){
 
 /* ------------- End Controller Functions ------------- */
 
-app.use('/lodgings', router);
+app.use('/boats', router);
 app.use('/login', login);
 
 app.use( function(err, req, res, next){
