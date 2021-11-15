@@ -116,9 +116,9 @@ router.get('/:id', checkJwt, function(req, res){
     });
 });
 
-router.post('/', checkJwt, function(req, res){
+router.post('/', checkJwt, function(err, req, res, next){
     post_lodging(req.body.name, req.body.description, req.body.price, req.user.name); 
-    res.status(201).send('{ "id": ' + key.id + ' }').end(); 
+    res.status(201).json({"Success": "post succeeded"}).end(); 
 });
 
 login.post('/', function(req, res){
