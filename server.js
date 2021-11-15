@@ -136,15 +136,12 @@ router.post('/', checkJwt, function(req, res){
     }
 });
 */
-router.post('/', checkJwt, function(err, req, res, next){
-    /*
-    if (err.name === 'UnauthorizedError') {
+router.post('/', checkJwt, function(req, res, error, next){
+    if (error.name === 'UnauthorizedError') {
         res.status(401).json({"Error": "JWT is invalid or missing"}).end(); 
     }
-    */
     post_lodging(req.body.name, req.body.description, req.body.price, req.user.name); 
-    res.status(201).end(); 
-
+    res.status(201).send('{ "id": ' + key.id + ' }').end(); 
     //.then( key => {
         //res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
         //res.status(201).send('{ "id": ' + key.id + ' }'); 
