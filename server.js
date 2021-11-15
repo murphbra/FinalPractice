@@ -84,6 +84,10 @@ router.get('/', checkJwt, function(req, res){
     console.log(JSON.stringify(req.user));
     const lodgings = get_lodgings(req.user.name)
 	.then( (lodgings) => {
+        for(var x=0; x< lodgings.length; x++)
+        {
+            lodgings[x].sub = req.user.sub; 
+        }
         res.status(200).json(lodgings);
     });
 });
