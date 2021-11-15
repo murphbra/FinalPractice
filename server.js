@@ -136,7 +136,7 @@ router.post('/', checkJwt, function(req, res){
     }
 });
 */
-router.post('/', checkJwt, function(err, req, res, next){
+router.post('/', checkJwt, function(req, res){
     /*
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({"Error": "JWT is invalid or missing"}).end(); 
