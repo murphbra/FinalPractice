@@ -153,14 +153,7 @@ app.use('/boats', router);
 app.use('/login', login);
 
 app.use( function(err, req, res, next){
-    if (err.name === 'UnauthorizedError' && req.method=="GET" && req.path=='/boats') {
-        res.status(200).send('array of public json boat objects here'); 
-    }
-    next(); 
-}); 
-
-app.use( function(err, req, res, next){
-    if (req.method=="POST" && req.path=='/boats') {
+    if (err.name === 'UnauthorizedError') {
         res.status(401).send('Missing or invalid JWT'); 
     }
     next(); 
