@@ -120,11 +120,19 @@ router.post('/', checkJwt, function(req, res){
     if(req.get('content-type') !== 'application/json'){
         res.status(415).send('Server only accepts application/json data.')
     }
-    post_lodging(req.body.name, req.body.description, req.body.price, req.user.name)
-    .then( key => {
-        res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
-        res.status(201).send('{ "id": ' + key.id + ' }')
-    } );
+    if(req.user === undefined)
+    {
+        res.status(403).json({"error": "JWT is invalid"}).end(); 
+    }
+    else 
+    {
+        post_lodging(req.body.name, req.body.description, req.body.price, req.user.name)
+        .then( key => {
+            res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
+            res.status(201).send('{ "id": ' + key.id + ' }')
+    });
+
+    }
 });
 
 login.post('/', function(req, res){
