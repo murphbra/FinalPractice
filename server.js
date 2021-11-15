@@ -136,12 +136,11 @@ router.post('/', checkJwt, function(req, res){
     }
 });
 */
-router.post('/', function(req, res){
+router.post('/', checkJwt, function(req, res){
     if(req.get('content-type') !== 'application/json'){
         res.status(415).send('Server only accepts application/json data.')
     }
     try  {
-        checkJwt; 
         post_lodging(req.body.name, req.body.description, req.body.price, req.user.name)
         .then( key => {
             res.location(req.protocol + "://" + req.get('host') + req.baseUrl + '/' + key.id);
