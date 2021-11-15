@@ -117,7 +117,10 @@ router.get('/:id', checkJwt, function(req, res){
 });
 
 router.post('/', checkJwt, function(req, res){
-
+    if(err.name === 'UnauthorizedError'){
+        res.status(401).send("JWT invalid/missing"); 
+    }
+    
     post_lodging(req.body.name, req.body.description, req.body.price, req.user.name); 
     res.status(201).json({"Success": "post succeeded"}).end(); 
 });
