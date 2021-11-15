@@ -136,8 +136,8 @@ router.post('/', checkJwt, function(req, res){
     }
 });
 */
-router.post('/', checkJwt, function(error, req, res, next){
-    if (error.name === 'UnauthorizedError') {
+router.post('/', checkJwt, function(err, req, res, next){
+    if (err.name === 'UnauthorizedError') {
         res.status(401).send("error invalid jwt"); 
     }
     post_lodging(req.body.name, req.body.description, req.body.price, req.user.name); 
