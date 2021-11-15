@@ -22,9 +22,9 @@ const LODGING = "Lodging";
 const router = express.Router();
 const login = express.Router();
 
-const CLIENT_ID = 'YOUR_CLIENT_ID';
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
-const DOMAIN = 'YOUR_DOMAIN.auth0.com';
+const CLIENT_ID = 'jGPlK34s10yEoMFXM7RFmzyo3NxWertG';
+const CLIENT_SECRET = 'IPtU-JePD5P1ACVlXwzyAT3ZVOZqRDspZba3FhcL-mPN2B6-QT7O3pO1n2UoyD0O';
+const DOMAIN = '493-assignment-7.us.auth0.com';
 
 app.use(bodyParser.json());
 
