@@ -160,7 +160,7 @@ app.use( function(err, req, res, next){
 }); 
 
 app.use( function(err, req, res, next){
-    if (err.name === 'UnauthorizedError' && req.method=="POST" && req.path=='/boats') {
+    if (req.method=="POST" && req.path=='/boats') {
         res.status(401).send('Missing or invalid JWT'); 
     }
     next(); 
