@@ -62,10 +62,10 @@ function get_boats(owner){
 		});
 }
 
-function get_boats_unprotected(){
+function get_boats_public(){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
-			return entities[0].map(fromDatastore);
+			return entities[0].map(fromDatastore).filter ( item => item.public === true);
 		});
 }
 
@@ -82,15 +82,11 @@ function get_boat(id, owner){
 /* ------------- Begin Controller Functions ------------- */
 
 router.get('/', checkJwt, function(req, res){
-    console.log('jwt' + req.user);
-    console.log(JSON.stringify(req.user));
-    const lodgings = get_lodgings(req.user.name)
-	.then( (lodgings) => {
-        for(var x=0; x< lodgings.length; x++)
-        {
-            lodgings[x].sub = req.user.sub; 
-        }
-        res.status(200).json(lodgings);
+    //console.log('jwt' + req.user);
+    //console.log(JSON.stringify(req.user));
+    const boats = get_boats(req.user.name)
+	.then( (boats) => {
+        res.status(200).json(boats);
     });
 });
 
@@ -155,6 +151,11 @@ app.use('/login', login);
 app.use( function(err, req, res, next){
     if (err.name === 'UnauthorizedError' && req.method=='POST' && req.path=='/boats') {
         res.status(401).send('Missing or invalid JWT'); 
+    }
+    else if (err.name === 'UnauthorizedError' && req.method=='GET' && req.path=='/boats'){
+        get_boats_public().then((boats) => {
+            res.status(200).send(boats).end(); 
+        })
     }
     next(); 
 }); 
