@@ -159,6 +159,12 @@ app.use( function(err, req, res, next){
     next(); 
 }); 
 
+app.use( function(err, req, res, next){
+    if (err.name === 'UnauthorizedError' && req.method=="POST" && req.path=='/boats') {
+        res.status(401).send('Missing or invalid JWT'); 
+    }
+    next(); 
+}); 
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
