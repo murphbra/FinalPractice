@@ -84,7 +84,7 @@ function get_boat(id, owner){
 router.get('/', checkJwt, function(req, res){
     //console.log('jwt' + req.user);
     //console.log(JSON.stringify(req.user));
-    const boats = get_boats(req.user.name)
+    const boats = get_boats(req.user.sub)
 	.then( (boats) => {
         res.status(200).json(boats);
     });
