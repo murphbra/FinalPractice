@@ -69,12 +69,11 @@ function get_boats_public(){
 		});
 }
 
-function get_boat(id, owner){
-    const key = datastore.key([BOAT, parseInt(id,10)]);
-    return datastore.get(key).then( (data) => {
-            return fromDatastore(data[0]);
-        }
-    );
+function get_boats_public_owner(owner){
+	const q = datastore.createQuery(BOAT);
+	return datastore.runQuery(q).then( (entities) => {
+			return entities[0].map(fromDatastore).filter ( item => item.public === true).filter(item => item.owner === owner);
+		});
 }
 
 function errorJwtPost(){
@@ -120,38 +119,21 @@ function errorJwtGet(){
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/', errorJwtGet(), function(req, res){
+router.get('/boats', errorJwtGet(), function(req, res){
         get_boats(req.user.sub)
         .then( (boats) => {
             res.status(200).json(boats); 
         })
 });
 
-router.get('/unsecure', function(req, res){
-    const lodgings = get_lodgings_unprotected()
-	.then( (lodgings) => {
-        res.status(200).json(lodgings);
-    });
-});
+router.get('owners/:owner_id/boats', function(req, res){
+    get_boats_public_owner(req.params.owner_id).then((boats) =>{
+        res.status(200).json(boats); 
+    })
+}); 
 
-router.get('/:id', checkJwt, function(req, res){
-        console.log('jwt' + req.user);
-    const lodgings = get_lodging(req.params.id)
-	.then( (lodging) => {
-        const accepts = req.accepts(['application/json', 'text/html']);
-        if(lodging.owner && lodging.owner !== req.user.name){
-            res.status(403).send('Forbidden');
-        } else if(!accepts){
-            res.status(406).send('Not Acceptable');
-        } else if(accepts === 'application/json'){
-            res.status(200).json(lodging);
-        } else if(accepts === 'text/html'){
-            res.status(200).send(json2html(lodging).slice(1,-1));
-        } else { res.status(500).send('Content type got messed up!'); }
-    });
-});
 
-router.post('/', errorJwtPost(), function(req, res){
+router.post('/boats', errorJwtPost(), function(req, res){
     post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
         res.status(201).json(boat).end(); 
     })
@@ -182,21 +164,8 @@ login.post('/', function(req, res){
 
 /* ------------- End Controller Functions ------------- */
 
-app.use('/boats', router);
+app.use('/', router);
 app.use('/login', login);
-/*
-app.use( function(err, req, res, next){
-    if(err.name==='UnauthorizedError' && req.method=='POST' && req.path=='/boats'){
-        res.status(401).send('Missing or invalid JWT');
-    }
-    if(err.name==='UnauthorizedError' && req.method=='GET' && req.path=='/boats'){
-        get_boats_public().then((boats) => {
-            res.status(200).send(boats); 
-        }); 
-    }
-    next(); 
-}); 
-*/
 
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
