@@ -126,7 +126,7 @@ router.get('/boats', errorJwtGet(), function(req, res){
         })
 });
 
-router.get('owners/:owner_id/boats', function(req, res){
+router.get('/owners/:owner_id/boats', function(req, res){
     get_boats_public_owner(req.params.owner_id).then((boats) =>{
         res.status(200).json(boats); 
     })
