@@ -168,7 +168,7 @@ router.delete('/boats/:boat_id', errorJwtPost(), function(req, res){
         }
         else {
             delete_boat(req.params.boat_id).then(() => {
-                res.status(204).json({"Success": "Boat deleted"}); 
+                res.status(204); 
             })
         }
     }); 
