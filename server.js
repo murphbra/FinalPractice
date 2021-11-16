@@ -65,7 +65,7 @@ function get_boats(owner){
 function get_boats_public(){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
-			return entities[0].map(fromDatastore).filter ( item => item.public === true);
+			return entities[0].map(fromDatastore) //.filter ( item => item.public === true);
 		});
 }
 
