@@ -46,6 +46,24 @@ const checkJwt = jwt({
     algorithms: ['RS256']
   });
 
+function errorJwt(){
+    return [jwt({
+        secret: jwksRsa.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `https://${DOMAIN}/.well-known/jwks.json`
+        }),
+      
+        // Validate the audience and the issuer.
+        issuer: `https://${DOMAIN}/`,
+        algorithms: ['RS256']
+      }), 
+      function(err, req, res, next){
+          next(err); 
+      }
+    ]
+}
 /* ------------- Begin Lodging Model Functions ------------- */
 function post_boat(name, type, length, public, owner){
     var key = datastore.key(BOAT);
@@ -65,7 +83,7 @@ function get_boats(owner){
 function get_boats_public(){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
-			return entities[0].map(fromDatastore) //.filter ( item => item.public === true);
+			return entities[0].map(fromDatastore).filter ( item => item.public === true);
 		});
 }
 
@@ -82,8 +100,6 @@ function get_boat(id, owner){
 /* ------------- Begin Controller Functions ------------- */
 
 router.get('/', checkJwt, function(req, res){
-    //console.log('jwt' + req.user);
-    //console.log(JSON.stringify(req.user));
     const boats = get_boats(req.user.sub)
 	.then( (boats) => {
         res.status(200).json(boats);
@@ -114,10 +130,12 @@ router.get('/:id', checkJwt, function(req, res){
     });
 });
 
-router.post('/', checkJwt, function(req, res){
-    post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
-        res.status(201).json(boat).end(); 
-    }); 
+router.post('/', function(req, res){
+    errorJwt().then(() => {
+        post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
+            res.status(201).json(boat).end(); 
+        }); 
+    })
 });
 
 login.post('/', function(req, res){
