@@ -99,11 +99,13 @@ function get_boat(id, owner){
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/', checkJwt, function(req, res){
-    const boats = get_boats(req.user.sub)
-	.then( (boats) => {
-        res.status(200).json(boats);
-    });
+router.get('/', function(req, res){
+    errorJwt().then(()=> {
+        get_boats(req.user.sub)
+        .then( (boats) => {
+            res.status(200).json(boats); 
+        })
+    })
 });
 
 router.get('/unsecure', function(req, res){
@@ -167,10 +169,10 @@ app.use('/boats', router);
 app.use('/login', login);
 
 app.use( function(err, req, res, next){
-    if(req.method=='POST' && req.path=='/boats'){
+    if(err.name==='UnauthorizedError' && req.method=='POST' && req.path=='/boats'){
         res.status(401).send('Missing or invalid JWT');
     }
-    if(req.method=='GET' && req.path=='/boats'){
+    if(err.name==='UnauthorizedError' && req.method=='GET' && req.path=='/boats'){
         get_boats_public().then((boats) => {
             res.status(200).send(boats); 
         }); 
