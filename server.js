@@ -153,11 +153,11 @@ app.use( function(err, req, res, next){
         if(req.method=='POST' && req.path=='/boats'){
             res.status(401).send('Missing or invalid JWT');
         }
-        if(req.method=='GET' && req.path=='/boats'){
-            get_boats_public().then((boats) => {
-                res.status(200).send(boats); 
-            }); 
-        }
+    }
+    if(req.method=='GET' && req.path=='/boats'){
+        get_boats_public().then((boats) => {
+            res.status(200).send(boats); 
+        }); 
     }
     next(); 
 }); 
