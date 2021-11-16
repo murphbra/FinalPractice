@@ -91,7 +91,7 @@ function errorJwtPost(){
         algorithms: ['RS256']
       }), 
       function(err, req, res, next){
-          res.status(401); 
+          res.status(401).end(); 
       }
     ]
 }
@@ -113,7 +113,6 @@ function errorJwtGet(){
             get_boats_public().then((boats) => {
                 res.status(200).send(boats); 
             }); 
-            res.status(200); 
         }
     ]
 }
