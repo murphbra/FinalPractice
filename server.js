@@ -60,9 +60,7 @@ function errorJwt(){
         algorithms: ['RS256']
       }), 
       function(err, req, res, next){
-            if(err.name==='UnauthorizedError' && req.method=='POST' && req.path=='/boats'){
-                res.status(401).send('Missing or invalid JWT');
-            }
+          res.status(err.status).json(err); 
       }
     ]
 }
@@ -134,11 +132,9 @@ router.get('/:id', checkJwt, function(req, res){
     });
 });
 
-router.post('/', function(req, res){
-    errorJwt().then((token) => {
-        post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
-            res.status(201).json(boat).end(); 
-        }); 
+router.post('/', errorJwt(), function(req, res){
+    post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
+        res.status(201).json(boat).end(); 
     })
 });
 
@@ -169,7 +165,7 @@ login.post('/', function(req, res){
 
 app.use('/boats', router);
 app.use('/login', login);
-
+/*
 app.use( function(err, req, res, next){
     if(err.name==='UnauthorizedError' && req.method=='POST' && req.path=='/boats'){
         res.status(401).send('Missing or invalid JWT');
@@ -181,6 +177,8 @@ app.use( function(err, req, res, next){
     }
     next(); 
 }); 
+*/
+
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
