@@ -76,12 +76,18 @@ function get_boats_public_owner(owner){
 		});
 }
 
-function get_boat(id){
-    const key = datastore.key([BOAT, parseInt(id,10)]);
-    return datastore.get(key).then( (data) => {
-            return fromDatastore(data[0]);
+function get_boat(id) {
+    const key = datastore.key([BOAT, parseInt(id, 10)]);
+    return datastore.get(key).then((entity) => {
+        if (entity[0] === undefined || entity[0] === null) {
+            // No entity found. Don't try to add the id attribute
+            return entity;
+        } else {
+            // Use Array.map to call the function fromDatastore. This function
+            // adds id attribute to every element in the array entity
+            return entity.map(fromDatastore);
         }
-    );
+    });
 }
 
 function delete_boat(id){
@@ -155,14 +161,14 @@ router.post('/boats', errorJwtPost(), function(req, res){
 router.delete('/boats/:boat_id', errorJwtPost(), function(req, res){
     get_boat(req.params.boat_id).then((boat) => {
         if(boat[0] === undefined || boat[0] === null){
-            res.status(403).end(); 
+            res.status(403).json({"Error": "Invalid boat id"}); 
         }
         else if(req.user.sub != boat[0].owner){
-            res.status(403).end(); 
+            res.status(403).json({"Error": "Not owner of this boat"}); 
         }
         else {
             delete_boat(req.params.boat_id).then(() => {
-                res.status(204).end(); 
+                res.status(204).json({"Success": "Boat deleted"}); 
             })
         }
     }); 
