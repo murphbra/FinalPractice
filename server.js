@@ -60,7 +60,9 @@ function errorJwt(){
         algorithms: ['RS256']
       }), 
       function(err, req, res, next){
-          next(err); 
+            if(err.name==='UnauthorizedError' && req.method=='POST' && req.path=='/boats'){
+                res.status(401).send('Missing or invalid JWT');
+            }
       }
     ]
 }
@@ -133,7 +135,7 @@ router.get('/:id', checkJwt, function(req, res){
 });
 
 router.post('/', function(req, res){
-    errorJwt().then(() => {
+    errorJwt().then((token) => {
         post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
             res.status(201).json(boat).end(); 
         }); 
