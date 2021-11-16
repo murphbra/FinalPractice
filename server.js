@@ -76,6 +76,19 @@ function get_boats_public_owner(owner){
 		});
 }
 
+function get_boat(id){
+    const key = datastore.key([BOAT, parseInt(id,10)]);
+    return datastore.get(key).then( (data) => {
+            return fromDatastore(data[0]);
+        }
+    );
+}
+
+function delete_boat(id){
+    const key = datastore.key([BOAT, parseInt(id, 10)]);
+    return datastore.delete(key); 
+}
+
 function errorJwtPost(){
     return [jwt({
         secret: jwksRsa.expressJwtSecret({
@@ -138,6 +151,22 @@ router.post('/boats', errorJwtPost(), function(req, res){
         res.status(201).json(boat).end(); 
     })
 });
+
+router.delete('/boats/:boat_id', errorJwtPost(), function(req, res){
+    get_boat(req.params.boat_id).then((boat) => {
+        if(boat[0] === undefined || boat[0] === null){
+            res.status(403).end(); 
+        }
+        else if(req.user.sub != boat[0].owner){
+            res.status(403).end(); 
+        }
+        else {
+            delete_boat(req.params.boat_id).then(() => {
+                res.status(204).end(); 
+            })
+        }
+    }); 
+}); 
 
 login.post('/', function(req, res){
     const username = req.body.username;
