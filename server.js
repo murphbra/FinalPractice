@@ -46,24 +46,6 @@ const checkJwt = jwt({
     algorithms: ['RS256']
   });
 
-function errorJwt(){
-    return [jwt({
-        secret: jwksRsa.expressJwtSecret({
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: `https://${DOMAIN}/.well-known/jwks.json`
-        }),
-      
-        // Validate the audience and the issuer.
-        issuer: `https://${DOMAIN}/`,
-        algorithms: ['RS256']
-      }), 
-      function(err, req, res, next){
-          res.status(err.status).json(err); 
-      }
-    ]
-}
 /* ------------- Begin Lodging Model Functions ------------- */
 function post_boat(name, type, length, public, owner){
     var key = datastore.key(BOAT);
@@ -95,17 +77,55 @@ function get_boat(id, owner){
     );
 }
 
+function errorJwtPost(){
+    return [jwt({
+        secret: jwksRsa.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `https://${DOMAIN}/.well-known/jwks.json`
+        }),
+      
+        // Validate the audience and the issuer.
+        issuer: `https://${DOMAIN}/`,
+        algorithms: ['RS256']
+      }), 
+      function(err, req, res, next){
+          res.status(401); 
+      }
+    ]
+}
+
+function errorJwtGet(){
+    return [jwt({
+        secret: jwksRsa.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: `https://${DOMAIN}/.well-known/jwks.json`
+        }),
+      
+        // Validate the audience and the issuer.
+        issuer: `https://${DOMAIN}/`,
+        algorithms: ['RS256']
+      }), 
+      function(err, req, res, next){
+            get_boats_public().then((boats) => {
+                res.status(200).send(boats); 
+            }); 
+            res.status(200); 
+        }
+    ]
+}
 /* ------------- End Model Functions ------------- */
 
 /* ------------- Begin Controller Functions ------------- */
 
-router.get('/', function(req, res){
-    errorJwt().then(()=> {
+router.get('/', errorJwtGet(), function(req, res){
         get_boats(req.user.sub)
         .then( (boats) => {
             res.status(200).json(boats); 
         })
-    })
 });
 
 router.get('/unsecure', function(req, res){
@@ -132,7 +152,7 @@ router.get('/:id', checkJwt, function(req, res){
     });
 });
 
-router.post('/', errorJwt(), function(req, res){
+router.post('/', errorJwtPost(), function(req, res){
     post_boat(req.body.name, req.body.type, req.body.length, req.body.public, req.user.sub).then((boat) => {
         res.status(201).json(boat).end(); 
     })
