@@ -12,6 +12,7 @@ const datastore = new Datastore();
 const cors = require('cors'); 
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
+
 const BOAT = "Boat";
 const router = express.Router();
 const login = express.Router();
@@ -130,7 +131,7 @@ function errorJwtGet(){
 /* ------------- Begin Controller Functions ------------- */
 router.get('/home', function (req, res) {
     res.render('home'); 
-})
+}); 
 
 
 router.get('/boats', errorJwtGet(), function(req, res){
