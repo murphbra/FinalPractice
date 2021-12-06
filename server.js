@@ -4,35 +4,33 @@
 
 const express = require('express');
 const app = express();
-
 const json2html = require('json-to-html');
-
 const {Datastore} = require('@google-cloud/datastore');
-
 const bodyParser = require('body-parser');
 const request = require('request');
-
 const datastore = new Datastore();
-
+const cors = require('cors'); 
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-
 const BOAT = "Boat";
-
 const router = express.Router();
 const login = express.Router();
-
 const CLIENT_ID = 'jGPlK34s10yEoMFXM7RFmzyo3NxWertG';
 const CLIENT_SECRET = 'IPtU-JePD5P1ACVlXwzyAT3ZVOZqRDspZba3FhcL-mPN2B6-QT7O3pO1n2UoyD0O';
 const DOMAIN = '493-assignment-7.us.auth0.com';
+var exphbs = require('express-handlebars');
+app.engine('.hbs', exphbs({                     
+    extname: ".hbs"
+}));
 
 app.use(bodyParser.json());
+app.use(cors()); 
+app.set('view engine', '.hbs'); 
 
 function fromDatastore(item){
     item.id = item[Datastore.KEY].id;
     return item;
 }
-
 const checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
       cache: true,
@@ -54,28 +52,24 @@ function post_boat(name, type, length, public, owner){
         new_boat.id = key.id; 
         return new_boat});
 }
-
 function get_boats(owner){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
 			return entities[0].map(fromDatastore).filter( item => item.owner === owner );
 		});
 }
-
 function get_boats_public(){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
 			return entities[0].map(fromDatastore).filter ( item => item.public === true);
 		});
 }
-
 function get_boats_public_owner(owner){
 	const q = datastore.createQuery(BOAT);
 	return datastore.runQuery(q).then( (entities) => {
 			return entities[0].map(fromDatastore).filter ( item => item.public === true).filter(item => item.owner === owner);
 		});
 }
-
 function get_boat(id) {
     const key = datastore.key([BOAT, parseInt(id, 10)]);
     return datastore.get(key).then((entity) => {
@@ -89,12 +83,10 @@ function get_boat(id) {
         }
     });
 }
-
 function delete_boat(id){
     const key = datastore.key([BOAT, parseInt(id, 10)]);
     return datastore.delete(key); 
 }
-
 function errorJwtPost(){
     return [jwt({
         secret: jwksRsa.expressJwtSecret({
@@ -113,7 +105,6 @@ function errorJwtPost(){
       }
     ]
 }
-
 function errorJwtGet(){
     return [jwt({
         secret: jwksRsa.expressJwtSecret({
@@ -137,6 +128,10 @@ function errorJwtGet(){
 /* ------------- End Model Functions ------------- */
 
 /* ------------- Begin Controller Functions ------------- */
+router.get('/home', function (req, res) {
+    res.render('home'); 
+})
+
 
 router.get('/boats', errorJwtGet(), function(req, res){
         get_boats(req.user.sub)
