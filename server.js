@@ -130,7 +130,7 @@ function errorJwtGet(){
 
 /* ------------- Begin Controller Functions ------------- */
 router.get('/home', function (req, res) {
-    res.render('home'); 
+    res.render("home"); 
 }); 
 
 
