@@ -129,11 +129,6 @@ function errorJwtGet(){
 /* ------------- End Model Functions ------------- */
 
 /* ------------- Begin Controller Functions ------------- */
-router.get('/home', function (req, res) {
-    res.render("home"); 
-}); 
-
-
 router.get('/boats', errorJwtGet(), function(req, res){
         get_boats(req.user.sub)
         .then( (boats) => {
